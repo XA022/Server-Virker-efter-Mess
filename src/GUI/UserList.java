@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,15 +14,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
+
 import java.awt.Color;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+
 import javax.swing.border.MatteBorder;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+
+import dao.DaoService;
 import model.QueryBuild.QueryBuilder;
+import model.user.User;
  
 public class UserList extends JPanel {
     /**
@@ -31,7 +40,7 @@ public class UserList extends JPanel {
 	private static final ActionListener ActionListener = null;
 	private boolean DEBUG = false;
 	private JButton btnAdd;
-	private JButton btnDelete;
+	private JButton btnDeactivate;
 	private JButton btnLogout;
 	private JButton btnMainMenu;
 	private ResultSet rs;
@@ -56,7 +65,12 @@ public class UserList extends JPanel {
         try {
 			QueryBuilder qb = new QueryBuilder();
 			rs = qb.selectFrom("users").all().ExecuteQuery();
-			
+			int initialCount = 0;
+			while(rs.next()){
+				initialCount++;
+			}
+			rs.beforeFirst();
+			data = new Object[initialCount][5];
 	        int count = 0;
 	        while (rs.next()) {
 	        	data[count][0] = rs.getString("userid");
@@ -71,7 +85,12 @@ public class UserList extends JPanel {
 			e1.printStackTrace();
 		}
 
- 
+        System.out.println(data[0][1]);
+        System.out.println(data[0][2]);
+        System.out.println(data[0][3]);
+        System.out.println(data[0][4]);
+
+
         final JTable table = new JTable(data, columnNames);
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
@@ -104,16 +123,25 @@ public class UserList extends JPanel {
         btnAdd.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
         btnAdd.setForeground(new Color(0, 0, 205));
         btnAdd.setOpaque(true);
+        
+        
         btnAdd.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-
-          String firstName = JOptionPane.showInputDialog(null, "UserID", null);
-          String lastName = JOptionPane.showInputDialog(null, "Email", null);
-          String eMail = JOptionPane.showInputDialog(null, "Date", null);
-          String password = JOptionPane.showInputDialog(null, "Write your password", null);
           
+          
+          String eMail = JOptionPane.showInputDialog(null, "E-Mail", null);
+          String password = JOptionPane.showInputDialog(null, "Choose password", null);
+          
+          User user = new User();
+          user.setActive(1);
+          user.setEmail(eMail);
+          user.setPassword(password);
+          user.setDate(new Date());
+          DaoService.getInstance().getUserDAO().addUser(user);
         	}
         });
+        
+        
         
         btnAdd.setBounds(1019, 556, 118, 29);
         add(btnAdd);
@@ -148,12 +176,41 @@ public class UserList extends JPanel {
 
         add(lblUserlist);
         
-        JButton btnDelete = new JButton("Delete");
-        btnDelete.setOpaque(true);
-        btnDelete.setForeground(new Color(0, 0, 205));
-        btnDelete.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
-        btnDelete.setBounds(1019, 515, 118, 29);
-        add(btnDelete);
+        JButton btnDeactivate = new JButton("Deactivate");
+        btnDeactivate.setOpaque(true);
+        btnDeactivate.setForeground(new Color(0, 0, 205));
+        btnDeactivate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
+        btnDeactivate.setBounds(1019, 515, 118, 29);
+        
+        btnDeactivate.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		int deactivateRow = table.getSelectedRow();
+                int numCols = table.getColumnCount();
+                javax.swing.table.TableModel model = table.getModel();
+                User userToDeactivate = new User();
+                for (int j=0; j < numCols; j++) {
+                	String columnName = model.getColumnName(j);
+                	if(columnName=="UserID") {
+                		userToDeactivate.setUserId(Integer.valueOf((String) model.getValueAt(deactivateRow, j)));
+                	}
+                	else if(columnName=="Email") {
+                		userToDeactivate.setEmail(model.getValueAt(deactivateRow, j).toString());
+                	}
+                	else if(columnName=="Password") {
+                		userToDeactivate.setPassword(model.getValueAt(deactivateRow, j).toString());
+                	}
+                }
+                DaoService.getInstance().getUserDAO().updateUser(userToDeactivate);
+
+                }
+        		
+        	
+        });
+        
+        
+        
+        
+        add(btnDeactivate);
         
         JLabel lblNewLabel = new JLabel("");
         lblNewLabel.setIcon(new ImageIcon(UserList.class.getResource("/Images/CBSLogo3.png")));
@@ -220,7 +277,7 @@ public class UserList extends JPanel {
     
     public void addActionListener(ActionListener l) {
 //		btnAdd.addActionListener(l);
-		btnDelete.addActionListener(l);
+		btnDeactivate.addActionListener(l);
 		btnLogout.addActionListener(l);
 		btnMainMenu.addActionListener(l);
 		
@@ -234,8 +291,8 @@ public class UserList extends JPanel {
 		return btnAdd;
 	}
 
-	public JButton getBtnDelete() {
-		return btnDelete;
+	public JButton getBtnDeactivate() {
+		return btnDeactivate;
 	}
 
 	public JButton getBtnMainMenu() {

@@ -3,9 +3,9 @@ package controller;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import model.Model;
+import dao.ModelDAO;
 
-public class Controller extends Model {
+public class Controller extends ModelDAO {
 	
 	private PreparedStatement saveNotes = null;
 	

@@ -10,7 +10,7 @@ import JsonClasses.DeleteCalender;
 
 import com.google.gson.*;
 
-import databaseMethods.SwitchMethods;
+import dao.SwitchMethods;
 
 public class GiantSwitch {
 	
@@ -45,7 +45,11 @@ public class GiantSwitch {
 		case "logIn":
 			AuthUser AU = (AuthUser)gson.fromJson(jsonString, AuthUser.class);
 			System.out.println("Recieved logIn");
-			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
+			try {
+				answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			break;
 
 		case "logOut":

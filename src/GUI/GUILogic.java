@@ -37,7 +37,7 @@ public class GUILogic {
 		
 	}
 	public void run() {
-
+		System.out.println("In run");
 		screen.show(Screen.LOGIN);
 		screen.setVisible(true);
 	}
@@ -66,6 +66,7 @@ public class GUILogic {
 			}	
 			}	
 			catch(Exception e3){
+				System.out.println("Exception caught: " + e3.getMessage());
 			}
 		}	
 	}
@@ -204,7 +205,7 @@ public class GUILogic {
 			if (e.getSource() == screen.getUserList().getBtnAdd()){
 			
 			}
-			if (e.getSource() == screen.getUserList().getBtnDelete()){
+			if (e.getSource() == screen.getUserList().getBtnDeactivate()){
 				
 			}
 

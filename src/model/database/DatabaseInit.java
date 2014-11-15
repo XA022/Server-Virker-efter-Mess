@@ -1,13 +1,14 @@
 package model.database;
 
-import model.Model;
 import model.QueryBuild.QueryBuilder;
 
 import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-public class DatabaseInit extends Model {
+import dao.ModelDAO;
+
+public class DatabaseInit extends ModelDAO {
 
     //Test main method
     public static void main(String[] args) throws IOException, SQLException {

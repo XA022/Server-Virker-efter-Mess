@@ -1,7 +1,8 @@
 package model.QueryBuild;
 
-import model.Model;
 import org.apache.commons.lang.StringEscapeUtils;
+
+import dao.ModelDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 /**
  * Created by jesperbruun on 16/10/14.
  */
-public class Execute extends Model {
+public class Execute extends ModelDAO {
 
     private final String SELECT = "SELECT ";
     private final String FROM = " FROM ";
@@ -114,11 +115,12 @@ public class Execute extends Model {
 
         } else if(getQueryBuilder().isUpdate()) {
             sql = UPDATE + getQueryBuilder().getTableName() + " SET " + getQueryBuilder().getFields() + "" + WHERE + getWhere().getWhereKey() + " " + getWhere().getWhereOperator() + " ?;";
+            System.out.println("update: " + sql);
             try {
                 getConnection(false);
                 getConn();
-                String cleanSql = StringEscapeUtils.escapeSql(sql);
-                sqlStatement = getConn().prepareStatement(cleanSql);
+//                String cleanSql = StringEscapeUtils.escapeSql(sql);                
+                sqlStatement = getConn().prepareStatement(sql);
                 sqlStatement.setString(1, getWhere().getWhereValue());
 
             } catch (SQLException e) {
@@ -130,7 +132,7 @@ public class Execute extends Model {
             sql = INSERTINTO + getQueryBuilder().getTableName() + " (" + getQueryBuilder().getFields() + ")" + VALUES + "(";
             StringBuilder sb = new StringBuilder();
             for (String n : getValues().getValues()) {
-                if (sb.length() > 0) sb.append(',');
+                if (sb.length() > 0) sb.append(",");
                 sb.append(" ?");
             }
             sql += sb.toString();
@@ -150,7 +152,8 @@ public class Execute extends Model {
                 e.printStackTrace();
             }
         }
-
+        System.out.println("SQLStatement.toString: " + sqlStatement.toString());
+        System.out.println("SQLStatement: " + sqlStatement);
         return sqlStatement.execute();
     }
 

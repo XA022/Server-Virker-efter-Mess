@@ -2,10 +2,10 @@ package model.note;
 
 import java.sql.SQLException;
 
-import model.Model;
+import dao.ModelDAO;
 import model.QueryBuild.*;
 
-public class Note extends Model{
+public class Note extends ModelDAO{
 	
 	NoteModel notes = new NoteModel(0, null, null, null, 0, 0);
 	QueryBuilder qb = new QueryBuilder(); 
