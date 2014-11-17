@@ -10,8 +10,8 @@ public class TCPClient {
 	public static void main(String[] args) throws Exception {
 		String modifiedSentence;
 		Gson gson = new GsonBuilder().create();
-		CreateCalender CC = new CreateCalender();
-		CC.setCalenderName("Din mors kalender2");
+		CreateCalendar CC = new CreateCalendar();
+		CC.setCalendarName("Din mors kalender2");
 		CC.setPublicOrPrivate(1);
 		CC.setUserName("John");
 		String gsonString = gson.toJson(CC);

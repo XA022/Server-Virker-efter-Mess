@@ -10,15 +10,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class Configurations {
-    private String host;
-    private String port;
-    private String username;
-    private String dbname;
-    private String password;
+    private String host = "localhost";
+    private String port = "8888";
+    private String username = "root";
+    private String dbname = "cbscalendar";
+    private String password = "";
 
     // FFkey is used in Encryption.java
-    private String ffcryptkey;
+    private String ffcryptkey = "3.1470";
 
+    
     // Weather variables
     private String weather_expiration_time;
     private String weather_lat;
