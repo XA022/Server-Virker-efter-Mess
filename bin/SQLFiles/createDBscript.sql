@@ -4,9 +4,9 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Create Tables */
 
-CREATE TABLE IF NOT EXISTS Calendar
+CREATE TABLE IF NOT EXISTS Calender
 (
-	calendarID int NOT NULL AUTO_INCREMENT,
+	CalenderID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
 	Active tinyint,
 	CreatedBy varchar(255) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Calendar
 	-- 2 = private
 	PrivatePublic tinyint NOT NULL COMMENT '1 = public
 	2 = private',
-	PRIMARY KEY (calendarID)
+	PRIMARY KEY (CalenderID)
 );
 
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS events
 	-- 
 	customevent boolean COMMENT 'Decides wether the event is an import-event or user created
 ',
-	calendarID int NOT NULL,
+	CalenderID int NOT NULL,
 	PRIMARY KEY (eventid)
 );
 
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS roles
 CREATE TABLE IF NOT EXISTS userevents
 (
 	userid int NOT NULL,
-	calendarID int NOT NULL
+	CalenderID int NOT NULL
 );
 
 
@@ -113,15 +113,15 @@ true,
 /* Create Foreign Keys */
 
 ALTER TABLE events
-	ADD FOREIGN KEY (calendarID)
-	REFERENCES Calender (calendarID)
+	ADD FOREIGN KEY (CalenderID)
+	REFERENCES Calender (CalenderID)
 	ON UPDATE RESTRICT
 ;
 
 
 ALTER TABLE userevents
-	ADD FOREIGN KEY (calendarID)
-	REFERENCES Calender (calendarID)
+	ADD FOREIGN KEY (CalenderID)
+	REFERENCES Calender (CalenderID)
 	ON UPDATE RESTRICT
 ;
 
@@ -174,9 +174,9 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Create Tables */
 
-CREATE TABLE IF NOT EXISTS calendar
+CREATE TABLE IF NOT EXISTS Calender
 (
-	calendarID int NOT NULL AUTO_INCREMENT,
+	CalenderID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
 	Active tinyint,
 	CreatedBy varchar(255) NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS calendar
 	-- 2 = private
 	PrivatePublic tinyint NOT NULL COMMENT '1 = public
 	2 = private',
-	PRIMARY KEY (calendarID)
+	PRIMARY KEY (CalenderID)
 );
 
 
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS events
 	-- 
 	customevent boolean COMMENT 'Decides wether the event is an import-event or user created
 ',
-	calendarID int NOT NULL,
+	CalenderID int NOT NULL,
 	PRIMARY KEY (eventid)
 );
 
@@ -250,7 +250,7 @@ CREATE TABLE IF NOT EXISTS roles
 CREATE TABLE IF NOT EXISTS userevents
 (
 	userid int NOT NULL,
-	calendarID int NOT NULL
+	CalenderID int NOT NULL
 );
 
 
@@ -269,15 +269,15 @@ CREATE TABLE IF NOT EXISTS users
 /* Create Foreign Keys */
 
 ALTER TABLE events
-	ADD FOREIGN KEY (calendarID)
-	REFERENCES Calender (calendarID)
+	ADD FOREIGN KEY (CalenderID)
+	REFERENCES Calender (CalenderID)
 	ON UPDATE RESTRICT
 ;
 
 
 ALTER TABLE userevents
-	ADD FOREIGN KEY (calendarID)
-	REFERENCES Calender (calendarID)
+	ADD FOREIGN KEY (CalenderID)
+	REFERENCES Calender (CalenderID)
 	ON UPDATE RESTRICT
 ;
 

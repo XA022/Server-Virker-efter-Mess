@@ -14,23 +14,20 @@ public class SwitchMethods extends ModelDAO
 	/**
 	 * Allows the client to create a new calendar
 	 * @param userName
-	 * @param calendarName
+	 * @param calenderName
 	 * @param privatePublic
 	 * @return
 	 * @throws SQLException
 	 */
 
-	public String createNewCalendar (String userName, String calendarName, int privatePublic) throws SQLException
+	public String createNewCalender (String userName, String calenderName, int privatePublic) throws SQLException
 	{
 		String stringToBeReturned ="";
 		testConnection();
-		System.out.println("connection til sql oprettet");
-		if(authenticateNewCalendar(calendarName) == false)
+		if(authenticateNewCalender(calenderName) == false)
 		{
-			System.out.println("der prøves ar oprette en ny kalender");
-			addNewCalendar(calendarName, userName, privatePublic);
-			System.out.println("kalenderen er oprettet");
-			stringToBeReturned = "The new calendar has been created!";
+			addNewCalender(calenderName, userName, privatePublic);
+			stringToBeReturned = "The new calender has been created!";
 		}
 		else
 		{
@@ -41,14 +38,14 @@ public class SwitchMethods extends ModelDAO
 		return stringToBeReturned;
 	}
 	
-	public boolean authenticateNewCalendar(String newCalendarName) throws SQLException
+	public boolean authenticateNewCalender(String newCalenderName) throws SQLException
 	{
 		getConn();
 		boolean authenticate = false;
 		
-		resultSet= qb.selectFrom("calendar").where("name", "=", newCalendarName).ExecuteQuery();
+		resultSet= qb.selectFrom("calendar").where("name", "=", newCalenderName).ExecuteQuery();
 				
-				//("select * from test.calender where Name = '"+newCalendarName+"';");
+				//("select * from test.calender where Name = '"+newCalenderName+"';");
 		while(resultSet.next())
 		{
 			authenticate = true;
@@ -56,13 +53,13 @@ public class SwitchMethods extends ModelDAO
 		return authenticate;
 	}
 	
-	public void addNewCalendar (String newCalendarName, String userName, int publicOrPrivate) throws SQLException
+	public void addNewCalender (String newCalenderName, String userName, int publicOrPrivate) throws SQLException
 	{
 		String [] keys = {"Name","active","CreatedBy","PrivatePublic"};
-		String [] values = {newCalendarName,"1",userName, Integer.toString(publicOrPrivate)};
+		String [] values = {newCalenderName,"1",userName, Integer.toString(publicOrPrivate)};
 		qb.update("calendar", keys, values).all().Execute();
 		
-//		doUpdate("insert into test.calendar (Name, Active, CreatedBy, PrivatePublic) VALUES ('"+newCalenderName+"', '1', '"+userName+"', '"+publicOrPrivate+"');");
+//		doUpdate("insert into test.calender (Name, Active, CreatedBy, PrivatePublic) VALUES ('"+newCalenderName+"', '1', '"+userName+"', '"+publicOrPrivate+"');");
 	}
 	/**
 	 * Allows the client to delete a calendar
@@ -70,31 +67,31 @@ public class SwitchMethods extends ModelDAO
 	 * @param calenderName
 	 * @return
 	 */
-	public String deleteCalendar (String userName, String calendarName) throws SQLException
+	public String deleteCalender (String userName, String calenderName) throws SQLException
 	{
 		String stringToBeReturned ="";
 		testConnection();
-		stringToBeReturned = removeCalendar(userName, calendarName);
+		stringToBeReturned = removeCalender(userName, calenderName);
 
 		return stringToBeReturned;
 	}
 	
-	public String removeCalendar (String userName, String calendarName) throws SQLException
+	public String removeCalender (String userName, String calenderName) throws SQLException
 	{
 		String stringToBeReturend = "";
 		String usernameOfCreator ="";
-		String calendarExists = "";
-		resultSet = qb.selectFrom("Calendar").where("Name", "=", calendarName).ExecuteQuery();
+		String calenderExists = "";
+		resultSet = qb.selectFrom("Calender").where("Name", "=", calenderName).ExecuteQuery();
 				
-//				("select * from calendar where Name = '"+calenderName+"';");
+//				("select * from calender where Name = '"+calenderName+"';");
 		while(resultSet.next())
 		{
-			calendarExists = resultSet.toString();
+			calenderExists = resultSet.toString();
 		}
-		if(!calendarExists.equals(""))
+		if(!calenderExists.equals(""))
 		{
 			String [] value = {"CreatedBy"};
-			resultSet = qb.selectFrom(value, "Calendar").where("Name", "=", calendarName).ExecuteQuery();
+			resultSet = qb.selectFrom(value, "Calender").where("Name", "=", calenderName).ExecuteQuery();
 			while(resultSet.next())
 			{
 				usernameOfCreator = resultSet.toString();
@@ -102,20 +99,20 @@ public class SwitchMethods extends ModelDAO
 			}
 			if(!usernameOfCreator.equals(userName))
 			{
-				stringToBeReturend = "Only the creator of the calendar is able to delete it.";
+				stringToBeReturend = "Only the creator of the calender is able to delete it.";
 			}
 			else
 			{
 				String [] keys = {"Active"};
 				String [] values = {"2"};
-				qb.update("Calendar", keys, values).where("Name", "=", calendarName).Execute();
-				stringToBeReturend = "Calendar has been set inactive";
+				qb.update("Calendar", keys, values).where("Name", "=", calenderName).Execute();
+				stringToBeReturend = "Calender has been set inactive";
 			}
 			stringToBeReturend = resultSet.toString();
 		}
 		else
 		{
-			stringToBeReturend = "The calendar you are trying to delete, does not exists.";
+			stringToBeReturend = "The calender you are trying to delete, does not exists.";
 		}
 		
 		
