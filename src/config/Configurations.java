@@ -80,7 +80,7 @@ public class Configurations {
     }
 
 
-// Weather settrs and getters.
+// Weather setters and getters.
 
     public String getWeather_expiration_time() {
         return weather_expiration_time;
