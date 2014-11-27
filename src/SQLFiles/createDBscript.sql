@@ -34,12 +34,13 @@ CREATE TABLE IF NOT EXISTS events
 (
 	eventid int NOT NULL AUTO_INCREMENT,
 	type int NOT NULL,
-	location int,
-	createdby int NOT NULL,
+	location String,
+	createdbt String NOT NULL,
 	start datetime NOT NULL,
 	end datetime NOT NULL,
-	name varchar(0) NOT NULL,
+	name varchar(255) NOT NULL,
 	text text NOT NULL,
+	int active NOT NULL,
 	-- Decides wether the event is an import-event or user created
 	-- 
 	customevent boolean COMMENT 'Decides wether the event is an import-event or user created
@@ -65,7 +66,7 @@ CREATE TABLE IF NOT EXISTS notes
 	createdBy varchar(255) NOT NULL,
 	text text,
 	dateTime datetime NOT NULL,
-	active bit,
+	active int,
 	PRIMARY KEY (noteid)
 );
 

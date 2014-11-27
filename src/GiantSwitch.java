@@ -5,8 +5,16 @@ import model.calendar.Event;
 import model.note.Note;
 import JsonClasses.AuthUser;
 import JsonClasses.CalendarInfo;
-import JsonClasses.CreateCalendar;
+import JsonClasses.CreateCalendar
+import JsonClasses.CreateEvent;
+import JsonClasses.CreateNote;
 import JsonClasses.DeleteCalendar;
+import JsonClasses.DeleteEvent;
+import JsonClasses.DeleteNote;
+import JsonClasses.GetCalendar;
+import JsonClasses.GetEvents;
+import JsonClasses.GetNote;
+
 
 import com.google.gson.*;
 
@@ -52,7 +60,7 @@ public class GiantSwitch {
 			}
 			break;
 
-		case "logOut":
+		case "logOut": //OVERFLØDIG
 			System.out.println("Recieved logOut");
 			break;
 
@@ -71,36 +79,53 @@ public class GiantSwitch {
 			answer = SW.deleteCalendar(DC.getUserName(), DC.getCalendarName());
 			break;
 		
-		case "saveImportedCalendar":
+		case "saveImportedCalendar": // Unødig
 			
 			
 			break;
 			
 		case "getCalendar":
 			System.out.println("Recieved getCalendar");
+			// 1 - OPRET JSON CLASS
+			GetCalendar GC = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			// 2 - CONVERT FROM JSON STRING TO JAVA OBJECT
+			answer = SW.getCalendar(GC.getName());
+			// 3 - OPRETTE SWITCHMETHODS
 			break;
+
+			/*************
+			 ** Events **
+			 *************/
 
 		case "getEvents":
 			System.out.println("Recieved getEvents");
+			GetEvents GE = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			answer = SW.GetEvents(GE.getCreatedby());
 			break;
 
 		case "createEvent":
 			System.out.println("Recieved saveEvent");
+			CreateEvents CE = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			answer = SW.CreateEvent(CE.getType(), CE.getLocation(), CE.getCreatedby(), 
+					CE.getStarttime(), CE.getEndtime(), CE.getName(), CE.getText());
 			break;
 
-		case "getEventInfo":
-			System.out.println("Recieved getEventInfo");
+		case "deleteEvent":
+
+			System.out.println("Recieved deleteEvent");
+			DeleteEvent DE = (DeleteEvent).gsonfromJson(jsonString,DeleteEvent.class);
+			answer = SW.DeleteEvent(DE.getName());
 			break;
 			
-		case "deleteEvent":
-			System.out.println("Recieved deleteEvent");
-		
-		case "saveNote":
-			System.out.println("Recieved saveNote");
-			break;
-
+		case "createNote":
+			System.out.println("Recieved CreateNote");
+			CreateNote CN = (CreateNote)gson.fromJson(jsonString, CreateNote.class);
+			answer = SW.CreateNote(CN.getEventID(), CN.getCreatedBy(), CN.getText(), CN.getDatetime());
+			
 		case "getNote":
 			System.out.println("Recieved getNote");
+			GetNote GN = (GetNote)gson.fromJson(jsonString, getNote.class);
+			answer = SW.GetNote(GN.getEventId());
 			break;
 			
 		case "deleteNote":
@@ -133,22 +158,20 @@ public class GiantSwitch {
 		
 	}
 
-	//Creates a loooong else if statement, which checks the JSon string which keyword it contains, and returns the following 
+	//Creates a long else if statement, which checks the JSon string which keyword it contains, and returns the following 
 	//keyword if
 	public String Determine(String ID) {
 
 		if (ID.contains("getEvents")) {
 			return "getEvents";
-		} else if (ID.contains("getEventInfo")) {
-			return "getEventInfo";
-		} else if (ID.contains("saveNote")) {
-			return "saveNote";
 		} else if (ID.contains("getNote")) {
 			return "getNote";
 		} else if (ID.contains("deleteNote")){
 			return "deleteNote";
 		}else if  (ID.contains("deleteCalendar")){
 			return "deleteCalendar";
+		}else if   (ID.contains("createNote")) {
+			return "createNote";
 		} else if (ID.contains("getClientForecast")) {
 			return "getClientForecast";
 		} else if (ID.contains("saveImportedCalendar")) {

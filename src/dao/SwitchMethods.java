@@ -123,6 +123,96 @@ public class SwitchMethods extends ModelDAO
 		return stringToBeReturend;
 	}
 	
+	public String getCalendar(String userName) throws SQLException
+	{
+		String stringToBeReturned ="";
+		
+		resultSet = qb.selectFrom("Calendar").where("Name", "=", userName).ExecuteQuery();
+		
+		while(resultSet.next())
+		{
+			stringToBeReturned += resultSet.toString();
+		}
+		return stringToBeReturned;
+	}
+	
+	public String DeleteEvent(String name) throws SQLException
+	{
+		String stringToBeReturned = "";
+		String [] keys = {"active"};
+		String [] values = {"0"};
+		
+		qb.update("events", keys, values).where("Name", "=", name).Execute();
+		stringToBeReturned = "Event is now deleted";
+		
+		return stringToBeReturned;
+	}
+	
+	public String GetEvents(String createdby) throws SQLException
+	{
+		String stringToBeReturned ="";
+		
+		resultSet = qb.selectFrom("events").where("createdby", "=", createdby).ExecuteQuery();
+		
+		while(resultSet.next())
+		{
+			stringToBeReturned += resultSet.toString();
+		}
+		return stringToBeReturned;
+	}
+	
+	public String CreateEvent(int type, String location, String createdby, String start, String end, String name, String text) throws SQLException
+	{
+		String stringToBeReturned ="";
+		String [] keys = {"type", "location", "createdby", "start", "end", "name", "text", "active"};
+		String [] values = {String.valueOf(type), location, createdby, start, end, name, text, "1"};
+	
+		qb.insertInto("events", keys).values(values).Execute();
+		
+		stringToBeReturned = "event oprettet";
+		
+		return stringToBeReturned;
+	}
+		
+	public String CreateNote (int eventID, String createdby, String text, String dateTime) throws SQLException
+	{
+		String stringToBeReturned ="";
+		String [] keys = {"eventID", "createdby", "text", "dateTime", "active"};
+		String [] values = {String.valueOf(eventID), createdby, text, dateTime, "1"};
+		
+		qb.insertInto("notes", keys).values(values).Execute();
+		
+		stringToBeReturned = "note oprettet";
+		
+		return stringToBeReturned;
+
+	}
+	
+	public String GetNote(String eventId) throws SQLException
+	{
+		String stringToBeReturned ="";
+		
+		resultSet = qb.selectFrom("notes").where("eventId", "=", eventId).ExecuteQuery();
+		
+		while(resultSet.next())
+		{
+			stringToBeReturned += resultSet.toString();
+		}
+		return stringToBeReturned;
+	}
+	
+	public String DeleteNote(String eventId) throws SQLException
+	{
+		
+		String stringToBeReturned = "";
+		String [] keys = {"active"};
+		String [] values = {"0"};
+		
+		qb.update("notes", keys, values).where("eventId", "=", eventId).Execute();
+		stringToBeReturned = "Note is now deleted";
+		
+		return stringToBeReturned;
+	}
 	
 	// Metoden faar email og password fra switchen (udtrukket fra en json) samt en boolean der skal saettes til true hvis det er serveren der logger paa, og false hvis det er en klient
 	/**
