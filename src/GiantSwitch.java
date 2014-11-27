@@ -5,7 +5,7 @@ import model.calendar.Event;
 import model.note.Note;
 import JsonClasses.AuthUser;
 import JsonClasses.CalendarInfo;
-import JsonClasses.CreateCalendar
+import JsonClasses.CreateCalendar;
 import JsonClasses.CreateEvent;
 import JsonClasses.CreateNote;
 import JsonClasses.DeleteCalendar;
