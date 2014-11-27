@@ -60,7 +60,7 @@ public class GiantSwitch {
 			}
 			break;
 
-		case "logOut": //OVERFLØDIG
+		case "logOut": //OVERFLOEDIG
 			System.out.println("Recieved logOut");
 			break;
 
@@ -79,15 +79,13 @@ public class GiantSwitch {
 			answer = SW.deleteCalendar(DC.getUserName(), DC.getCalendarName());
 			break;
 		
-		case "saveImportedCalendar": // Unødig
-			
-			
+		case "saveImportedCalendar": // Unoedig
 			break;
 			
 		case "getCalendar":
 			System.out.println("Recieved getCalendar");
 			// 1 - OPRET JSON CLASS
-			GetCalendar GC = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			GetCalendar GC = (GetCalendar)gson.fromJson(jsonString, GetCalendar.class);
 			// 2 - CONVERT FROM JSON STRING TO JAVA OBJECT
 			answer = SW.getCalendar(GC.getName());
 			// 3 - OPRETTE SWITCHMETHODS
@@ -99,13 +97,13 @@ public class GiantSwitch {
 
 		case "getEvents":
 			System.out.println("Recieved getEvents");
-			GetEvents GE = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			GetEvents GE = (GetEvents)gson.fromJson(jsonString, GetEvents.class);
 			answer = SW.GetEvents(GE.getCreatedby());
 			break;
 
 		case "createEvent":
 			System.out.println("Recieved saveEvent");
-			CreateEvents CE = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			CreateEvent CE = (CreateEvent)gson.fromJson(jsonString, CreateEvent.class);
 			answer = SW.CreateEvent(CE.getType(), CE.getLocation(), CE.getCreatedby(), 
 					CE.getStarttime(), CE.getEndtime(), CE.getName(), CE.getText());
 			break;
@@ -113,7 +111,7 @@ public class GiantSwitch {
 		case "deleteEvent":
 
 			System.out.println("Recieved deleteEvent");
-			DeleteEvent DE = (DeleteEvent).gsonfromJson(jsonString,DeleteEvent.class);
+			DeleteEvent DE = (DeleteEvent)gson.fromJson(jsonString, DeleteEvent.class);
 			answer = SW.DeleteEvent(DE.getName());
 			break;
 			
@@ -124,12 +122,14 @@ public class GiantSwitch {
 			
 		case "getNote":
 			System.out.println("Recieved getNote");
-			GetNote GN = (GetNote)gson.fromJson(jsonString, getNote.class);
+			GetNote GN = (GetNote)gson.fromJson(jsonString, GetNote.class);
 			answer = SW.GetNote(GN.getEventId());
 			break;
 			
 		case "deleteNote":
 			System.out.println("Recieved deleteNote");
+			DeleteNote DN = (DeleteNote)gson.fromJson(jsonString, DeleteNote.class);
+			answer = SW.DeleteNote(DN.getEventId());
 			break;
 
 		/**********
