@@ -66,7 +66,7 @@ public abstract class ModelDAO {
     }
 
     /**
-     * Use a preparedstatment to run SQL on the database
+     * Use a prepared statement to run SQL on the database
      *
      * @param sql
      * @return PreparedStatement
