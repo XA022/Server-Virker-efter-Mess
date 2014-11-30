@@ -14,6 +14,7 @@ public class TCPClient {
 		CC.setCalendarName("Din mors kalender2");
 		CC.setPublicOrPrivate(1);
 		CC.setUserName("John");
+		CC.setUserID(1);
 		String gsonString = gson.toJson(CC);
 		System.out.println(CC);
 		System.out.println(gsonString);
@@ -27,6 +28,8 @@ public class TCPClient {
 		for (int i = 0; i < encrypted.length; i++)
 			encrypted[i] = (byte) (encrypted[i] ^ key);
 
+		int length = encrypted.length;
+		outToServer.writeInt(length);
 		outToServer.write(encrypted);
 		outToServer.flush();
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(

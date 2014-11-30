@@ -9,6 +9,7 @@ public class CreateCalendar implements java.io.Serializable
 	private String overallID = "createCalendar";
 	private String calendarName;
 	private String userName;
+	private long userID;
 	private int publicOrPrivate;
 	
 	//Getters and setters for everything, bitch
@@ -23,6 +24,12 @@ public class CreateCalendar implements java.io.Serializable
 	}
 	public void setCalendarName(String calendarName) {
 		this.calendarName = calendarName;
+	}
+	public long getUserID (){
+		return userID;
+	}
+	public void setUserID(long userID) {
+		this.userID = userID;
 	}
 	public String getUserName() {
 		return userName;

@@ -3,6 +3,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
+import sun.security.util.Length;
+
 
 public class ClientWorker implements  Runnable{
 	private Socket connectionSocketConected;
@@ -26,10 +28,11 @@ public class ClientWorker implements  Runnable{
 			//Creates an object of the data which is to be send back to the client, via the connectionSocket
 			DataOutputStream outToClient = new DataOutputStream(connectionSocketConected.getOutputStream());
 			System.out.println("Outtoclient oprettet!");
+			int Length = inFromClient.readInt();
 			//Sets client sentence equals input from client
-			incomingJson = inFromClient.readLine();			
-			
-			byte[] b = new byte[50000];
+//			incomingJson = inFromClient.readLine();			
+//			
+			byte[] b = new byte[Length];
 //			Added Skovmand d. 17/11
 			inFromClient.read(b);
 			
@@ -37,7 +40,7 @@ public class ClientWorker implements  Runnable{
 			
 			//cryp.StringEncryption(inFromClient.readLine());
 			System.out.println("Besked modtaget!");
-			//Sysout recieved message
+			//Sysout received message
 			System.out.println("Received: " + ny);
 			String returnSvar = GS.GiantSwitchMethod(ny);		
 			//Sends the capitalized message back to client!!

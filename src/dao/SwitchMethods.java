@@ -20,7 +20,7 @@ public class SwitchMethods extends ModelDAO
 	 * @throws SQLException
 	 */
 
-	public String createNewCalendar (String userName, String calendarName, int privatePublic) throws SQLException
+	public String createNewCalendar (long userID, String calendarName, int privatePublic) throws SQLException
 	{
 		String stringToBeReturned ="";
 		testConnection();
@@ -28,7 +28,7 @@ public class SwitchMethods extends ModelDAO
 		if(authenticateNewCalendar(calendarName) == false)
 		{
 			System.out.println("der prøves ar oprette en ny kalender");
-			addNewCalendar(calendarName, userName, privatePublic);
+			addNewCalendar(calendarName, userID, privatePublic);
 			System.out.println("kalenderen er oprettet");
 			stringToBeReturned = "The new calendar has been created!";
 		}
@@ -56,12 +56,12 @@ public class SwitchMethods extends ModelDAO
 		return authenticate;
 	}
 	
-	public void addNewCalendar (String newCalendarName, String userName, int publicOrPrivate) throws SQLException
+	public void addNewCalendar (String newCalendarName, long userID, int publicOrPrivate) throws SQLException
 	{
 		String [] keys = {"Name","active","CreatedBy","PrivatePublic"};
-		String [] values = {newCalendarName,"1",userName, Integer.toString(publicOrPrivate)};
-		qb.update("calendar", keys, values).all().Execute();
+		String [] values = {newCalendarName,"1",userID+"", Integer.toString(publicOrPrivate)};
 		
+		qb.insertInto("calendar", keys).values(values).Execute();
 //		doUpdate("insert into test.calendar (Name, Active, CreatedBy, PrivatePublic) VALUES ('"+newCalenderName+"', '1', '"+userName+"', '"+publicOrPrivate+"');");
 	}
 	/**
