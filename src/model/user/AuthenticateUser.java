@@ -10,7 +10,8 @@ public class AuthenticateUser {
 
 	private QueryBuilder qb;
 
-	// Metoden faar email og password fra switchen (udtrukket fra en json) samt en boolean der skal saettes til true hvis det er serveren der logger paa, og false hvis det er en klient
+	// Metoden faar email og password fra switchen (udtrukket fra en json) samt en boolean der skal saettes til true hvis det er serveren der logger paa,
+	// og false hvis det er en klient
 	/**
 	 * Allows the client to log in
 	 * @param email

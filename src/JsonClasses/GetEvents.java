@@ -6,6 +6,7 @@ public class GetEvents implements java.io.Serializable {
 	private String overallID = "getEvents"; 
 	private String createdby;
 	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

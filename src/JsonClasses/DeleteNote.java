@@ -5,6 +5,7 @@ public class DeleteNote implements java.io.Serializable{
 	private String overallID = "DeleteNote"; 
 	private String eventId;
 	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

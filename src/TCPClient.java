@@ -11,9 +11,9 @@ public class TCPClient {
 		String modifiedSentence;
 		Gson gson = new GsonBuilder().create();
 		CreateCalendar CC = new CreateCalendar();
-		CC.setCalendarName("Din mors kalender2");
+		CC.setCalendarName("kalender2");
 		CC.setPublicOrPrivate(1);
-		CC.setUserName("John");
+		CC.setUserName("HA.it");
 		CC.setUserID(1);
 		String gsonString = gson.toJson(CC);
 		System.out.println(CC);

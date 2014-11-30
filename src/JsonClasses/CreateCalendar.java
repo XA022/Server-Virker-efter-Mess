@@ -12,7 +12,7 @@ public class CreateCalendar implements java.io.Serializable
 	private long userID;
 	private int publicOrPrivate;
 	
-	//Getters and setters for everything, bitch
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

@@ -12,6 +12,7 @@ public class CreateEvent implements java.io.Serializable{
 	private String text;
 	private int active;
 	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

@@ -10,7 +10,7 @@ public class CreateNote implements java.io.Serializable{
 	private String datetime;
 	private int active;
 	
-	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

@@ -22,7 +22,7 @@ class Server
         BufferedReader inReader = new BufferedReader(new InputStreamReader(sk.getInputStream()));
         BufferedWriter outReader = new BufferedWriter(new OutputStreamWriter(sk.getOutputStream()));
  
-        //læser filnavnet som vi vil upload
+        //laeser filnavnet som vi vil upload
         String filename = inReader.readLine();
  
         if ( !filename.equals(""))
@@ -40,7 +40,7 @@ class Server
 	 	//til at undgaa for store filer
 	    long size = xy.length(); 
 	    if (size > 20480000) {
-	        System.out.println("File is too large. 20mb is max. styr dig selv");
+	        System.out.println("File is too large. 20mb is max.");
 	    }
 	    
 	    //streamer til project folder
@@ -75,7 +75,7 @@ class Server
     	    while ((length = inStream.read(buff)) > 0){
     	    	outStream.write(buffer, 0, length);
     	    }
-    	    //Vi lukker hele biksen, foer vi kan slette den gamle fil
+    	    //Vi lukker foer vi kan slette den gamle fil
     	    inStream.close();
     	    outStream.close();
     	    wr.flush();  	    

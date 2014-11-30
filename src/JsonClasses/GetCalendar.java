@@ -6,6 +6,7 @@ public class GetCalendar  implements java.io.Serializable
 	private String overallID = "getCalendar"; 
 	private String Name;
 	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

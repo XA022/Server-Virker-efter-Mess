@@ -5,6 +5,7 @@ public class DeleteEvent implements java.io.Serializable{
 	private String overallID = "deleteEvent"; 
 	private String Name;
 	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

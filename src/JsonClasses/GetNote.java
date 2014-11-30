@@ -6,7 +6,7 @@ public class GetNote implements java.io.Serializable {
 	private String overallID = "GetNote"; 
 	private String eventId;
 	
-	
+	//Getters and setters
 	public String getOverallID() {
 		return overallID;
 	}

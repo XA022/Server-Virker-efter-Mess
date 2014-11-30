@@ -27,7 +27,7 @@ public class SwitchMethods extends ModelDAO
 		System.out.println("connection til sql oprettet");
 		if(authenticateNewCalendar(calendarName) == false)
 		{
-			System.out.println("der prøves ar oprette en ny kalender");
+			System.out.println("der proeves ar oprette en ny kalender");
 			addNewCalendar(calendarName, userID, privatePublic);
 			System.out.println("kalenderen er oprettet");
 			stringToBeReturned = "The new calendar has been created!";

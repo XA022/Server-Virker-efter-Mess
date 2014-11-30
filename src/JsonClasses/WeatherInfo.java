@@ -6,6 +6,7 @@ public class WeatherInfo {
 	private String temperature;
 	private String overallID = "weather";
 	
+	//Getters and setters
 	public String getWeatherLocation() {
 		return weatherLocation;
 	}

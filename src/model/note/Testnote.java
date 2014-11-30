@@ -8,7 +8,7 @@ public class Testnote {
 		int nID = 3;
 		String text = "penis";
 		String date = "1000-01-01 00:00:00";
-		String cb = "createdBy din mor haha";
+		String cb = "createdBy xxx";
 		int ia = 1;
 		int eID = 11;
 		
