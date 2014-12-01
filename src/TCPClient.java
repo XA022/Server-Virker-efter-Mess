@@ -11,11 +11,12 @@ public class TCPClient {
 		String modifiedSentence;
 		Gson gson = new GsonBuilder().create();
 //		CreateCalendar CC = new CreateCalendar();
-//		CC.setCalendarName("kalender2");
+//		CC.setCalendarName("Ny Kalender");
 //		CC.setPublicOrPrivate(1);
 //		CC.setUserName("HA.it");
-//		CC.setUserID(1);
+//		CC.setUserID(3);
 		CreateEvent CE = new CreateEvent();
+		CE.setOverallID("CreateEvent");
 		CE.setType(1);
 		CE.setLocation("CBS");
 		CE.setCreatedby("Krri13ab");

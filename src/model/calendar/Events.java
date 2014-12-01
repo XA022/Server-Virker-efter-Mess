@@ -11,7 +11,7 @@ import model.QueryBuild.QueryBuilder;
 
 /**
  * Created by jesperbruun on 10/10/14.
- * Den laver selve arrayet af alle generede Event
+ * Den laver selve arrayet af alle generede Events
  */
 public class Events {
     ArrayList<Event> events = new ArrayList<Event>();
@@ -77,9 +77,9 @@ public class Events {
     }
     
     public static void main(String []args){
-    	Events Hej = new Events();
+    	Events ShowEvent = new Events();
     	
-    	Hej.getEvents();
-    	System.out.println(Hej.toString());
+    	ShowEvent.getEvents();
+    	System.out.println(ShowEvent.toString());
     }
 }
