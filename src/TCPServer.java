@@ -14,7 +14,7 @@ class TCPServer{
 		
 		//While something is true
 		while(true){
-			//Creates a socket and a buffered reader which recieves some sort of input from somewhere around the internet!
+			//Creates a socket and a buffered reader which receives some sort of input from somewhere around the internet!
 			Socket connectionSocket = welcomeSocket.accept();
 			ClientWorker client= new ClientWorker(connectionSocket);
 			Thread thread = new Thread(client, "client");
