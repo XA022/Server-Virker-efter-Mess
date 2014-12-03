@@ -45,17 +45,18 @@ public class GetCalendarData {
          * Get URL From calendar.cbs.dk -> Subscribe -> change URL to end with .json
          * Encrypt hash from
          */
-    	String userID = "1234";
-        String json = readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.getKey()+".json");
-//        String json = readUrl("http://calendar.cbs.dk/events.php/caha13ag/02a24d4e002e6e3571227c39e2f63784.json");
+    	String userID = "anha13ao";
+    	//String json = readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.getKey()+".json");
+    	String json = readUrl("http://calendar.cbs.dk/events.php/anha13ao/c69e9c9423e1154d9eea09b9a02a6a91.json");
         
 
-        Gson gson = new Gson();
-        Events events = gson.fromJson(json, Events.class); 
-
+        //Gson gson = new Gson();
+        //Events events = gson.fromJson(json, Events.class); 
+        
+        System.out.println(json);
         //tester events activityID's
-        for (int i = 0; i < events.getEvents().size(); i++){
-            System.out.println(events.getEvents().get(i).getActivityid());
-        }
+//        for (int i = 0; i < events.getEvents().size(); i++){
+//            System.out.println(events.getEvents().get(i).getActivityid());
+//        }
     }
 }
