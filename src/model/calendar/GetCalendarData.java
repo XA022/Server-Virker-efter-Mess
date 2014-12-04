@@ -1,7 +1,5 @@
 package model.calendar;
 
-import com.google.gson.Gson;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -11,7 +9,8 @@ import java.net.URL;
  */
 public class GetCalendarData {
 	
-	EncryptUserID e = new EncryptUserID();
+	private static final String USER_ID = "krri13ab";
+	EncryptUserID e = new EncryptUserID(USER_ID);
 
 	//henter data fra URL og l??er ind til en string
     private static String readUrl(String urlString) throws Exception {
@@ -45,9 +44,9 @@ public class GetCalendarData {
          * Get URL From calendar.cbs.dk -> Subscribe -> change URL to end with .json
          * Encrypt hash from
          */
-    	String userID = "anha13ao";
-    	//String json = readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.getKey()+".json");
-    	String json = readUrl("http://calendar.cbs.dk/events.php/anha13ao/c69e9c9423e1154d9eea09b9a02a6a91.json");
+    	String userID = USER_ID;
+    	String json = readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.getKey()+".json");
+//    	String json = readUrl("http://calendar.cbs.dk/events.php/anha13ao/c69e9c9423e1154d9eea09b9a02a6a91.json");
         
 
         //Gson gson = new Gson();

@@ -6,6 +6,7 @@ import model.QueryBuild.QueryBuilder;
 
 public class SwitchMethods extends ModelDAO
 {
+	private static final String ACTIVE_BIT = "1";
 	QueryBuilder qb = new QueryBuilder();
 	QOTDModel qm = new QOTDModel();
 	
@@ -164,8 +165,8 @@ public class SwitchMethods extends ModelDAO
 	public String CreateEvent(int type, String location, String createdby, String start, String end, String name, String text) throws SQLException
 	{
 		String stringToBeReturned ="";
-		String [] keys = {"type", "location", "createdby", "start", "end", "name", "text", "active"};
-		String [] values = {String.valueOf(type), location, createdby, start, end, name, text, "1"};
+		String [] keys = {"type", "location", "createdby", "start", "end", "name", "text", "active","calendarID"};
+		String [] values = {String.valueOf(type), location, createdby, start, end, name, text, ACTIVE_BIT,"1"};
 	
 		qb.insertInto("events", keys).values(values).Execute();
 		
@@ -223,7 +224,7 @@ public class SwitchMethods extends ModelDAO
 	 * @return
 	 * @throws Exception
 	 */
-	public String authenticate(String email, String password, boolean isAdmin) throws SQLException {
+	public String authenticate(String email, String password) throws SQLException {
 
 		String[] keys = {"userid", "email", "active", "password"};
 
@@ -241,19 +242,19 @@ public class SwitchMethods extends ModelDAO
 				// Hvis passwords matcher
 				if(resultSet.getString("password").equals(password))
 				{
-					int userID = resultSet.getInt("userid");
+//					int userID = resultSet.getInt("userid");
+//
+//					String[] key = {"type"};
 
-					String[] key = {"type"};
-
-					resultSet = qb.selectFrom(key, "roles").where("userid", "=", new Integer(userID).toString()).ExecuteQuery();
+//					resultSet = qb.selectFrom(key, "roles").where("userid", "=", new Integer(userID).toString()).ExecuteQuery();
 
 					// Hvis brugeren baade logger ind og er registreret som admin, eller hvis brugeren baade logger ind og er registreret som bruger
-					if((resultSet.getString("type").equals("admin") && isAdmin) || (resultSet.getString("type").equals("user") && !isAdmin))
-					{
+//					if((resultSet.getString("type").equals("admin")) || (resultSet.getString("type").equals("user") && !isAdmin))
+//					{
 						return "0"; // returnerer "0" hvis bruger/admin er godkendt
-					} else {
-						return "4"; // returnerer fejlkoden "4" hvis brugertype ikke stemmer overens med loginplatform
-					}
+//					} else {
+//						return "4"; // returnerer fejlkoden "4" hvis brugertype ikke stemmer overens med loginplatform
+//					}
 				} else {
 					return "3"; // returnerer fejlkoden "3" hvis password ikke matcher
 				}

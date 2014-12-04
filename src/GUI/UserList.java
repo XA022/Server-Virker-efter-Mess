@@ -119,7 +119,7 @@ public class UserList extends JPanel {
         //Add the scroll pane to this panel.
         add(scrollPane);
         
-        JButton btnAdd = new JButton("Add");
+        btnAdd = new JButton("Add");
         btnAdd.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
         btnAdd.setForeground(new Color(0, 0, 205));
         btnAdd.setOpaque(true);
@@ -146,7 +146,7 @@ public class UserList extends JPanel {
         btnAdd.setBounds(1019, 556, 118, 29);
         add(btnAdd);
         
-        JButton btnLogout = new JButton("Log out");
+        btnLogout = new JButton("Log out");
         btnLogout.setForeground(Color.WHITE);
         btnLogout.setFont(new Font("Arial", Font.BOLD, 30));
         btnLogout.setContentAreaFilled(false);
@@ -154,7 +154,7 @@ public class UserList extends JPanel {
         btnLogout.setBounds(642, 688, 152, 44);
         add(btnLogout);
         
-        JButton btnMainMenu = new JButton("Main Menu");
+        btnMainMenu = new JButton("Main Menu");
         btnMainMenu.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         	}
@@ -176,7 +176,7 @@ public class UserList extends JPanel {
 
         add(lblUserlist);
         
-        JButton btnDeactivate = new JButton("Deactivate");
+        btnDeactivate = new JButton("Deactivate");
         btnDeactivate.setOpaque(true);
         btnDeactivate.setForeground(new Color(0, 0, 205));
         btnDeactivate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
@@ -276,7 +276,7 @@ public class UserList extends JPanel {
     }
     
     public void addActionListener(ActionListener l) {
-//		btnAdd.addActionListener(l);
+		btnAdd.addActionListener(l);
 		btnDeactivate.addActionListener(l);
 		btnLogout.addActionListener(l);
 		btnMainMenu.addActionListener(l);

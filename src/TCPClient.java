@@ -16,7 +16,7 @@ public class TCPClient {
 //		CC.setUserName("HA.it");
 //		CC.setUserID(3);
 		CreateEvent CE = new CreateEvent();
-		CE.setOverallID("CreateEvent");
+		CE.setOverallID("createEvent");
 		CE.setType(1);
 		CE.setLocation("CBS");
 		CE.setCreatedby("Krri13ab");

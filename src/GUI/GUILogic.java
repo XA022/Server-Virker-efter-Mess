@@ -9,12 +9,15 @@ import GUI.AuthUser;
 
 import javax.swing.JOptionPane;
 
+import org.apache.struts.actions.SwitchAction;
+
+import dao.SwitchMethods;
 import model.QueryBuild.*;
 import GUI.Screen;
 
 public class GUILogic {
 	private Screen screen;
-	private boolean u;
+	private String authReply;
 	private boolean full = false;
 	
 	AuthUser a = new AuthUser();
@@ -43,27 +46,30 @@ public class GUILogic {
 	}
 	
 	private class LoginActionListener implements ActionListener {
+		private static final String LOGGED_IN = "0";
+
 		public void actionPerformed(ActionEvent e) {
 			try{
 				
-			String userName = screen.getLogin().getTextFieldUsername().getText();
-			String password = screen.getLogin().getTextFieldPassword().getText();
-			u=a.login(userName, password);
-			
-			if (e.getSource() == screen.getLogin().getBtnLogIn()){
-				
-				if(u == false){
-					JOptionPane.showMessageDialog(null, "\nPlease enter a valid username & password."
-							, "Error message",JOptionPane.PLAIN_MESSAGE);
-			}
-
-			if	(u != true)
-					{
-						screen.show(Screen.MAINMENU);
-					}
-				
+				String userName = screen.getLogin().getTextFieldUsername().getText();
+				String password = screen.getLogin().getTextFieldPassword().getText();
+				SwitchMethods switchMethods = new SwitchMethods();
+				authReply = switchMethods.authenticate(userName, password);
+				System.out.println("u: " + authReply);
+				if (e.getSource() == screen.getLogin().getBtnLogIn()){
+					
 	
-			}	
+					if	(authReply.equals(LOGGED_IN))
+							{
+								screen.show(Screen.MAINMENU);
+							}
+					else {
+						JOptionPane.showMessageDialog(null, "\nPlease enter a valid username & password."
+								, "Error message",JOptionPane.PLAIN_MESSAGE);
+					}
+						
+		
+				}	
 			}	
 			catch(Exception e3){
 				System.out.println("Exception caught: " + e3.getMessage());

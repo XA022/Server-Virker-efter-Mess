@@ -27,7 +27,7 @@ public class ClientWorker implements  Runnable{
 			DataInputStream inFromClient = new DataInputStream(connectionSocketConected.getInputStream());		
 			//Creates an object of the data which is to be send back to the client, via the connectionSocket
 			DataOutputStream outToClient = new DataOutputStream(connectionSocketConected.getOutputStream());
-			System.out.println("Outtoclient oprettet!");
+			System.out.println("outToClient oprettet!");
 			int Length = inFromClient.readInt();
 			//Sets client sentence equals input from client
 //			incomingJson = inFromClient.readLine();			

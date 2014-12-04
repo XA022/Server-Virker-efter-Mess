@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import model.QOTD.QOTDModel;
 import model.calendar.Event;
@@ -14,6 +15,7 @@ import JsonClasses.DeleteNote;
 import JsonClasses.GetCalendar;
 import JsonClasses.GetEvents;
 import JsonClasses.GetNote;
+
 
 
 import com.google.gson.*;
@@ -35,6 +37,7 @@ public class GiantSwitch {
 		
 		Gson gson = new GsonBuilder().create();
 		String answer = "";	
+
 		//Creates a switch which determines which method should be used. Methods will be applied later on
 		switch (Determine(jsonString)) {
 		//If the Json String contains one of the keywords below, run the relevant method.
@@ -54,7 +57,7 @@ public class GiantSwitch {
 			AuthUser AU = (AuthUser)gson.fromJson(jsonString, AuthUser.class);
 			System.out.println("Recieved logIn");
 			try {
-				answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
+				answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

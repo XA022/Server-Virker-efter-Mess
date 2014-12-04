@@ -16,8 +16,9 @@ public class AuthUser {
 					u = true;
 				}				
 
-				else
+				else {
 					u = false;
+				}
 
 			
 		}
