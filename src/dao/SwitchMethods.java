@@ -226,7 +226,7 @@ public class SwitchMethods extends ModelDAO
 	 */
 	public String authenticate(String email, String password) throws SQLException {
 
-		String[] keys = {"userid", "email", "active", "password"};
+		String[] keys = {"id", "email", "active", "password"};
 
 		qb = new QueryBuilder();
 

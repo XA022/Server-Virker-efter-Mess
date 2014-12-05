@@ -14,11 +14,17 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
+
+import model.note.Note;
+import model.note.NoteModel;
+import model.user.User;
+import dao.DaoService;
 
 public class NoteList extends JPanel {
 	private JTable table;
@@ -29,7 +35,7 @@ public class NoteList extends JPanel {
 	private JButton btnMainMenu;
 	private JButton btnLogout;
 	private JLabel label;
-	
+	private String[] columnNames = { "Note", "Event", "Date", "Numbers of Notes" };
 
 	/**
 	 * Create the panel.
@@ -39,7 +45,7 @@ public class NoteList extends JPanel {
 		setLayout(null);
 		
 		//Laver tabellen inde i Eventlisten.
-		String[] columnNames = { "Note", "Event", "Date", "Numbers of Notes" };
+
 
 		Object[][] data = {
 
@@ -139,5 +145,42 @@ public class NoteList extends JPanel {
 	public JButton getBtnLogout() {
 		return btnLogout;
 	}
+	
+//	private JTable getUserTable() {
+//		Object[][] data = {
+//		
+//		};
+//		ArrayList<User> users = DaoService.getInstance().getUserDAO().getAllUsers();
+//		
+//		data = new Object[users.size()][5];
+//
+//		for(int i=0;i<users.size();i++) {
+//			User user = users.get(i);
+//			data[i][0] = user.getUserId();
+//			data[i][1] = user.getEmail();
+//			data[i][2] = user.getActive();
+//			data[i][3] = user.getDate();
+//			data[i][4] = OBFUSCATED_PASSWORD;
+//		}
+//		return new JTable(data, columnNames);
+//	}
+	
+//	private Object[][] getNoteData(ArrayList<NoteModel> notes) {
+//		Object[][] data = {
+//				
+//		};
+//		
+//		data = new Object[notes.size()][5];
+//		 "Note", "Event", "Date", "Numbers of Notes" }
+//		for(int i=0;i<notes.size();i++) {
+//			NoteModel note = notes.get(i);
+//			data[i][0] = note.getNoteID();
+//			data[i][1] = note.get
+//			data[i][2] = note.getActive();
+//			data[i][3] = note.getDate();
+//			data[i][4] = note;
+//		}
+//		return data;
+//	}
 	
 }

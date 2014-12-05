@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,13 +14,13 @@ public class UserDAO extends ModelDAO {
 	QueryBuilder qb = new QueryBuilder();
 	QOTDModel qm = new QOTDModel();
 	private static final String tableName = "users";
-	private static final String userPK ="userid";
+	private static final String userPK ="id";
 	private static final String EQUALS_STRING ="=";
 	
 	public String addUser(User user) {
 		getConn();
 		boolean authenticate = false;
-		String[] keys = {"email","active","`created datetime`","password"};
+		String[] keys = {"email","active","createdDate","password"};
 		
 		try {
 			qb.insertInto(tableName, keys).values(getFieldsFromUser(user)).Execute();
@@ -50,11 +51,48 @@ public class UserDAO extends ModelDAO {
 		ArrayList<String> userFields = new ArrayList<String>();
 		userFields.add(user.getEmail());
 		userFields.add(String.valueOf(user.getActive()));
-		userFields.add(DateHelper.getFormattedDate(user.getDate()));
+		userFields.add(DateHelper.getFormattedDateString(user.getDate()));
 		userFields.add(user.getPassword());
 		
 		
 		return userFields.toArray(new String[userFields.size()]);
 		
 	}
+	
+	public ArrayList<User> getAllUsers() {
+        String[] columnNames = {"Id",
+                "Email",
+                "Active",
+                "CreatedDate",
+                "Password"};
+
+        ResultSet rs;
+        ArrayList<User> users = new ArrayList<User>();
+		Object[][] data = {		
+		};
+        try {
+			QueryBuilder qb = new QueryBuilder();
+			rs = qb.selectFrom("users").all().ExecuteQuery();
+			int initialCount = 0;
+			while(rs.next()){
+				initialCount++;
+			}
+			rs.beforeFirst();
+			data = new Object[initialCount][5];
+	        int count = 0;
+	        while (rs.next()) {
+	        	User user = new User();
+	        	user.setUserId(Integer.valueOf(rs.getString("id")));
+	        	user.setEmail(rs.getString("email"));
+	        	user.setActive(Integer.valueOf(rs.getString("active")));
+	        	user.setDate(DateHelper.getFormattedDateObject(rs.getString("createdDate")));
+	        	user.setPassword(rs.getString("password"));
+	        	users.add(user);
+
+	        }
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return users;
+	}	
 }

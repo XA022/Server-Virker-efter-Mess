@@ -16,9 +16,13 @@ import java.util.Date;
 
 import model.Forecast.Forecast;
 import model.QueryBuild.QueryBuilder;
+import model.util.DateHelper;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import com.sun.xml.internal.ws.spi.db.FieldSetter;
 
 public class QOTDModel {
 
@@ -70,11 +74,18 @@ public class QOTDModel {
     			String topic = (String) jsonObject.get("topic");
 
     			
-    			String[] keys = {"qotd"};
-    			String[] keys2 = {quote};
-    			
-    			
-    			qb.update("dailyupdate", keys, keys2).where("msg_type", "=", "1").Execute();
+    			String[] fields = {"date",
+    	    			"apparentTemperature",
+    	    			"summary",
+    	    			"qotd",
+    	    			"windspeed",
+    	    			"msg_type",
+    	    			"update_timestamp"};
+    			String[] values = {DateHelper.getFormattedDateString(new Date()),"15.0","long day",quote,"10.0","1",DateHelper.getFormattedDateString(new Date())};
+
+
+    			qb.insertInto("dailyupdate", fields).values(values).Execute();
+//    			qb.insertinto("dailyupdate", keys, keys2).where("msg_type", "=", "1").Execute();
     			
     	
 			} catch (Exception e) {

@@ -22,9 +22,13 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.border.MatteBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
@@ -43,58 +47,27 @@ public class UserList extends JPanel {
 	private JButton btnDeactivate;
 	private JButton btnLogout;
 	private JButton btnMainMenu;
+	private JButton btnActivate;
+	private JTable table;
 	private ResultSet rs;
+	private static final String OBFUSCATED_PASSWORD = "********";
+	private String[] columnNames = {"UserID",
+             "Email",
+             "Active",
+             "Created date",
+             "Password"};
 	
     public UserList() {
+       
     	setSize(new Dimension(1366, 768));
- 
-        String[] columnNames = {"UserID",
-                                "Email",
-                                "Active",
-                                "Created datetime",
-                                "Password"};
- 
-
-
-        	Object[][] data = {
-        		
-        };
-        
-	
-    
-        try {
-			QueryBuilder qb = new QueryBuilder();
-			rs = qb.selectFrom("users").all().ExecuteQuery();
-			int initialCount = 0;
-			while(rs.next()){
-				initialCount++;
-			}
-			rs.beforeFirst();
-			data = new Object[initialCount][5];
-	        int count = 0;
-	        while (rs.next()) {
-	        	data[count][0] = rs.getString("userid");
-	        	data[count][1] = rs.getString("email");
-	        	data[count][2] = rs.getString("active");
-	        	data[count][3] = rs.getString("created datetime");
-	        	data[count][4] = rs.getString("password");
-
-	        	count++;
-	        }
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-
-        System.out.println(data[0][1]);
-        System.out.println(data[0][2]);
-        System.out.println(data[0][3]);
-        System.out.println(data[0][4]);
-
-
-        final JTable table = new JTable(data, columnNames);
+    	table = new JTable();
+    	table.setModel(new DefaultTableModel());
+        table = getUserTable();
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
         table.setRowSelectionAllowed(true);
+        
+        
         
  
         if (DEBUG) {
@@ -129,15 +102,34 @@ public class UserList extends JPanel {
         	public void actionPerformed(ActionEvent arg0) {
           
           
-          String eMail = JOptionPane.showInputDialog(null, "E-Mail", null);
-          String password = JOptionPane.showInputDialog(null, "Choose password", null);
-          
-          User user = new User();
-          user.setActive(1);
-          user.setEmail(eMail);
-          user.setPassword(password);
-          user.setDate(new Date());
-          DaoService.getInstance().getUserDAO().addUser(user);
+		          String eMail = JOptionPane.showInputDialog(null, "E-Mail", null);
+		          String password = JOptionPane.showInputDialog(null, "Choose password", null);
+		          User userToAdd = new User();
+		          userToAdd.setActive(1);
+		          userToAdd.setEmail(eMail);
+		          userToAdd.setPassword(password);
+		          userToAdd.setDate(new Date());
+		          DaoService.getInstance().getUserDAO().addUser(userToAdd);
+		          
+		  		Object[][] data = {
+		  				
+				};
+				ArrayList<User> users = DaoService.getInstance().getUserDAO().getAllUsers();
+				User addedUser = users.get(users.size()-1);
+				data = new Object[1][5];
+
+					data[0][0] = addedUser.getUserId();
+					data[0][1] = addedUser.getEmail();
+					data[0][2] = addedUser.getActive();
+					data[0][3] = addedUser.getDate();
+					data[0][4] = OBFUSCATED_PASSWORD;
+				
+		          
+		          
+				DefaultTableModel model = new DefaultTableModel(getUserData(users), columnNames);
+	            table.setModel(model);
+
+			  table.repaint();
         	}
         });
         
@@ -181,7 +173,7 @@ public class UserList extends JPanel {
         btnDeactivate.setForeground(new Color(0, 0, 205));
         btnDeactivate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
         btnDeactivate.setBounds(1019, 515, 118, 29);
-        
+               
         btnDeactivate.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int deactivateRow = table.getSelectedRow();
@@ -191,7 +183,7 @@ public class UserList extends JPanel {
                 for (int j=0; j < numCols; j++) {
                 	String columnName = model.getColumnName(j);
                 	if(columnName=="UserID") {
-                		userToDeactivate.setUserId(Integer.valueOf((String) model.getValueAt(deactivateRow, j)));
+                		userToDeactivate.setUserId((Integer) model.getValueAt(deactivateRow, j));
                 	}
                 	else if(columnName=="Email") {
                 		userToDeactivate.setEmail(model.getValueAt(deactivateRow, j).toString());
@@ -200,8 +192,58 @@ public class UserList extends JPanel {
                 		userToDeactivate.setPassword(model.getValueAt(deactivateRow, j).toString());
                 	}
                 }
+                userToDeactivate.setActive(0);
                 DaoService.getInstance().getUserDAO().updateUser(userToDeactivate);
-
+                for (int j=0; j < numCols; j++) {
+                	String columnName = model.getColumnName(j);
+                	if(columnName=="Active") {
+                		model.setValueAt(0, deactivateRow, j);
+                	}
+                }
+//                table.tableChanged(new TableModelEvent(table.getModel()));
+                table.repaint();
+                }
+        		
+        	
+        });
+               
+        
+        add(btnDeactivate);
+        
+        
+        btnActivate = new JButton("Activate");
+        btnActivate.setOpaque(true);
+        btnActivate.setForeground(new Color(0, 0, 205));
+        btnActivate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 255)));
+        btnActivate.setBounds(1019, 600, 118, 29);
+        
+        btnActivate.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		int activateRow = table.getSelectedRow();
+                int numCols = table.getColumnCount();
+                javax.swing.table.TableModel model = table.getModel();
+                User userToActivate = new User();
+                for (int j=0; j < numCols; j++) {
+                	String columnName = model.getColumnName(j);
+                	if(columnName=="UserID") {
+                		userToActivate.setUserId((Integer) model.getValueAt(activateRow, j));
+                	}
+                	else if(columnName=="Email") {
+                		userToActivate.setEmail(model.getValueAt(activateRow, j).toString());
+                	}
+                	else if(columnName=="Password") {
+                		userToActivate.setPassword(model.getValueAt(activateRow, j).toString());
+                	}
+                }
+                userToActivate.setActive(1);
+                DaoService.getInstance().getUserDAO().updateUser(userToActivate);
+                for (int j=0; j < numCols; j++) {
+                	String columnName = model.getColumnName(j);
+                	if(columnName=="Active") {
+                		model.setValueAt(1, activateRow, j);
+                	}
+                }
+                table.repaint();
                 }
         		
         	
@@ -210,7 +252,10 @@ public class UserList extends JPanel {
         
         
         
-        add(btnDeactivate);
+        add(btnActivate);
+        
+        
+        
         
         JLabel lblNewLabel = new JLabel("");
         lblNewLabel.setIcon(new ImageIcon(UserList.class.getResource("/Images/CBSLogo3.png")));
@@ -280,6 +325,7 @@ public class UserList extends JPanel {
 		btnDeactivate.addActionListener(l);
 		btnLogout.addActionListener(l);
 		btnMainMenu.addActionListener(l);
+		btnActivate.addActionListener(l);
 		
 	}
 
@@ -303,4 +349,40 @@ public class UserList extends JPanel {
 		return btnLogout;
 	}
 	
+	private JTable getUserTable() {
+		Object[][] data = {
+		
+		};
+		ArrayList<User> users = DaoService.getInstance().getUserDAO().getAllUsers();
+		
+		data = new Object[users.size()][5];
+
+		for(int i=0;i<users.size();i++) {
+			User user = users.get(i);
+			data[i][0] = user.getUserId();
+			data[i][1] = user.getEmail();
+			data[i][2] = user.getActive();
+			data[i][3] = user.getDate();
+			data[i][4] = OBFUSCATED_PASSWORD;
+		}
+		return new JTable(data, columnNames);
+	}
+	
+	private Object[][] getUserData(ArrayList<User> users) {
+		Object[][] data = {
+				
+		};
+		
+		data = new Object[users.size()][5];
+
+		for(int i=0;i<users.size();i++) {
+			User user = users.get(i);
+			data[i][0] = user.getUserId();
+			data[i][1] = user.getEmail();
+			data[i][2] = user.getActive();
+			data[i][3] = user.getDate();
+			data[i][4] = OBFUSCATED_PASSWORD;
+		}
+		return data;
+	}
 }

@@ -21,7 +21,7 @@ public class Note extends ModelDAO{
 			String nId = String.valueOf(noteID);
 			String eId = String.valueOf(eventID);
 			
-			String[] fields = {"noteId", "eventId", "createdBy", "text", "dateTime", "active"};
+			String[] fields = {"id", "eventId", "createdBy", "text", "dateTime", "active"};
 			String[] values = {nId, eId, createdBy, text, dateTime, String.valueOf(isActive)};
 			try {
 				qb.insertInto("notes", fields).values(values).Execute();

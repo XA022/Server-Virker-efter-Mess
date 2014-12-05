@@ -33,6 +33,7 @@ public class GiantSwitch {
 		Note noteKlasse = new Note();
 		//ForecastModel forecastKlasse = new ForecastModel();
 		QOTDModel QOTDKlasse = new QOTDModel();
+		QOTDKlasse.saveQuote();
 		SwitchMethods SW = new SwitchMethods();
 		
 		Gson gson = new GsonBuilder().create();
@@ -139,7 +140,7 @@ public class GiantSwitch {
 		 ** QUOTE **
 		 **********/
 		case "getQuote":
-
+			System.out.println("in getQuote");
 		answer = QOTDKlasse.getQuote();
 			System.out.println(answer);
 			
