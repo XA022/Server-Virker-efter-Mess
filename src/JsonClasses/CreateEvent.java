@@ -5,7 +5,7 @@ public class CreateEvent implements java.io.Serializable{
 	private String overallID = "CreateEvent";
 	private int type;
 	private String location;
-	private String createdby;
+	private String userID;
 	private String starttime;
 	private String endtime;
 	private String name;
@@ -31,11 +31,11 @@ public class CreateEvent implements java.io.Serializable{
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public String getCreatedby() {
-		return createdby;
+	public String getuserID() {
+		return userID;
 	}
-	public void setCreatedby(String createdby) {
-		this.createdby = createdby;
+	public void setuserID(String userID) {
+		this.userID = userID;
 	}
 	public String getStarttime() {
 		return starttime;

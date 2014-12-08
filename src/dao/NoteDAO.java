@@ -31,13 +31,8 @@ public class NoteDAO extends ModelDAO {
 			
 			String[] fields = {"id", "eventId", "createdBy", "text", "dateTime", "active"};
 			String[] values = {nId, eId, createdBy, text, dateTime, String.valueOf(isActive)};
-			try {
-				qb.insertInto("notes", fields).values(values).Execute();
+			qb.insertInto("notes", fields).values(values).Execute();
 				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	
 //	public String updateNote(NoteModel note) {

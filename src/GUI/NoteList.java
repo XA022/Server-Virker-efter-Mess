@@ -24,7 +24,7 @@ import javax.swing.border.BevelBorder;
 import model.note.Note;
 import model.note.NoteModel;
 import model.user.User;
-import dao.DaoService;
+import dao.DaoController;
 
 public class NoteList extends JPanel {
 	private JTable table;

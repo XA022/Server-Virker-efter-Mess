@@ -4,7 +4,7 @@ public class GetEvents implements java.io.Serializable {
 
 	private static final long serialVersionUID = -3269894274812108796L;
 	private String overallID = "getEvents"; 
-	private String createdby;
+	private String userID;
 	
 	//Getters and setters
 	public String getOverallID() {
@@ -13,10 +13,10 @@ public class GetEvents implements java.io.Serializable {
 	public void setOverallID(String overallID) {
 		this.overallID = overallID;
 	}
-	public String getCreatedby() {
-		return createdby;
+	public String getUserID() {
+		return userID;
 	}
-	public void setCreatedby (String createdby) {
-		this.createdby = createdby;
+	public void setUserID (String userID) {
+		this.userID = userID;
 	}
 }

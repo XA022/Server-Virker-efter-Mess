@@ -13,10 +13,14 @@ public class Event {
     private String title;
     private String description;
     private String location;
-    private String createdby;
+    private String userId;
     private ArrayList<String> start;
     private ArrayList<String> end;
-
+    
+    public Event() {
+    	
+    }
+    
     // Settere og gettere for Event objektet 
     public void setActivityid(String activityid){
         this.activityid = activityid;
@@ -59,15 +63,8 @@ public class Event {
     public String getLocation(){
         return location;
     }
-
-    public void setCreatedby(String createdby){
-        this.createdby = createdby;
-    }
-    public String getCreatedby(){
-        return createdby;
-    }
     
-    public void setStart(ArrayList<String> start){
+	public void setStart(ArrayList<String> start){
         this.start = start;
     }
     public ArrayList<String> getStart(){
@@ -80,8 +77,9 @@ public class Event {
     public ArrayList<String> getEnd(){
         return end;
     }
+    
 	public Event(String activityid, String eventid, String type, String title,
-			String description, String location, String createdby, ArrayList<String> start,
+			String description, String location, String userId, ArrayList<String> start,
 			ArrayList<String> end) {
 		super();
 		this.activityid = activityid;
@@ -90,11 +88,23 @@ public class Event {
 		this.title = title;
 		this.description = description;
 		this.location = location;
-		this.createdby = createdby;
+		this.setUserId(userId);
 		this.start = start;
 		this.end = end;
 	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
     
-    
+    @Override
+	public String toString() {
+		return "Event [activityid=" + activityid + ", eventid=" + eventid
+				+ ", type=" + type + ", title=" + title + ", description="
+				+ description + ", location=" + location + ", userId=" + userId
+				+ ", start=" + start + ", end=" + end + "]";
+	}
 
 }

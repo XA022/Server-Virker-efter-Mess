@@ -26,10 +26,10 @@ public class Values {
 
     }
 
-    public Execute values(String[] values){
+    public Executor values(String[] values){
         Values v = new Values();
         v.setValues(values);
-        return new Execute(getQueryBuilder(), v);
+        return new Executor(getQueryBuilder(), v);
     }
 
 }

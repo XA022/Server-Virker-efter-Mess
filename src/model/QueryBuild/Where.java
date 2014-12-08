@@ -48,8 +48,8 @@ public class Where {
      * Select all columns from table in DB (SELECT * ...)
      * @return
      */
-    public Execute all(){
-        return new Execute(getQueryBuilder(), true);
+    public Executor all(){
+        return new Executor(getQueryBuilder(), true);
     }
 
 
@@ -60,15 +60,15 @@ public class Where {
      * @param value
      * @return
      */
-    public Execute where(String key, String operator, String value){
+    public Executor where(String key, String operator, String value){
 
         Where where = new Where();
         where.setWhereKey(key);
         where.setWhereOperator(operator);
         where.setWhereValue(value);
 
-        return new Execute(getQueryBuilder(), where);
-        //System.out.print("SELECT " + getSelectParameters() + " FROM " + getTableName() + " WHERE " + getWherekey() + " = " + getWherePlaceholders());
+        return new Executor(getQueryBuilder(), where);
+//        System.out.print("SELECT " + getSelectParameters() + " FROM " + getTableName() + " WHERE " + getWherekey() + " = " + getWherePlaceholders());
 
     }
 

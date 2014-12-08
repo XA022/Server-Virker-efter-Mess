@@ -1,40 +1,32 @@
 package GUI;
 
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
-
-import java.awt.Color;
-
-import javax.swing.JLabel;
-
-import java.awt.Font;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 
-import dao.DaoService;
-import model.QueryBuild.QueryBuilder;
 import model.user.User;
+import dao.DaoController;
  
 public class UserList extends JPanel {
     /**
@@ -109,12 +101,12 @@ public class UserList extends JPanel {
 		          userToAdd.setEmail(eMail);
 		          userToAdd.setPassword(password);
 		          userToAdd.setDate(new Date());
-		          DaoService.getInstance().getUserDAO().addUser(userToAdd);
+		          DaoController.getInstance().getUserDAO().addUser(userToAdd);
 		          
 		  		Object[][] data = {
 		  				
 				};
-				ArrayList<User> users = DaoService.getInstance().getUserDAO().getAllUsers();
+				ArrayList<User> users = DaoController.getInstance().getUserDAO().getAllUsers();
 				User addedUser = users.get(users.size()-1);
 				data = new Object[1][5];
 
@@ -180,20 +172,20 @@ public class UserList extends JPanel {
                 int numCols = table.getColumnCount();
                 javax.swing.table.TableModel model = table.getModel();
                 User userToDeactivate = new User();
-                for (int j=0; j < numCols; j++) {
-                	String columnName = model.getColumnName(j);
-                	if(columnName=="UserID") {
-                		userToDeactivate.setUserId((Integer) model.getValueAt(deactivateRow, j));
-                	}
-                	else if(columnName=="Email") {
-                		userToDeactivate.setEmail(model.getValueAt(deactivateRow, j).toString());
-                	}
-                	else if(columnName=="Password") {
-                		userToDeactivate.setPassword(model.getValueAt(deactivateRow, j).toString());
-                	}
-                }
+//                for (int j=0; j < numCols; j++) {
+//                	String columnName = model.getColumnName(j);
+//                	if(columnName=="UserID") {
+//                		userToDeactivate.setUserId((Integer) model.getValueAt(deactivateRow, j));
+//                	}
+//                	else if(columnName=="Email") {
+//                		userToDeactivate.setEmail(model.getValueAt(deactivateRow, j).toString());
+//                	}
+//                	else if(columnName=="Password") {
+//                		userToDeactivate.setPassword(model.getValueAt(deactivateRow, j).toString());
+//                	}
+//                }
                 userToDeactivate.setActive(0);
-                DaoService.getInstance().getUserDAO().updateUser(userToDeactivate);
+                DaoController.getInstance().getUserDAO().updateUserActiveStatus(userToDeactivate);
                 for (int j=0; j < numCols; j++) {
                 	String columnName = model.getColumnName(j);
                 	if(columnName=="Active") {
@@ -236,7 +228,7 @@ public class UserList extends JPanel {
                 	}
                 }
                 userToActivate.setActive(1);
-                DaoService.getInstance().getUserDAO().updateUser(userToActivate);
+                DaoController.getInstance().getUserDAO().updateUserActiveStatus(userToActivate);
                 for (int j=0; j < numCols; j++) {
                 	String columnName = model.getColumnName(j);
                 	if(columnName=="Active") {
@@ -353,7 +345,7 @@ public class UserList extends JPanel {
 		Object[][] data = {
 		
 		};
-		ArrayList<User> users = DaoService.getInstance().getUserDAO().getAllUsers();
+		ArrayList<User> users = DaoController.getInstance().getUserDAO().getAllUsers();
 		
 		data = new Object[users.size()][5];
 

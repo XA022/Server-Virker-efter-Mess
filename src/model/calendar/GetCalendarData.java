@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import com.google.gson.Gson;
+
 /**
  * Created by jesperbruun on 13/10/14.
  */
 public class GetCalendarData {
 	
 	private static final String USER_ID = "krri13ab";
+	private static final String CALENDAR_URL = "http://calendar.cbs.dk/events.php/<USER_ID_PLACEHOLDER>/<ENCRYPTED_KEY_PLACEHOLDER>.json";
+	private static final String USER_ID_PLACEHOLDER = "<USER_ID_PLACEHOLDER>";
+	private static final String ENCRYPTED_KEY_PLACEHOLDER = "<ENCRYPTED_KEY_PLACEHOLDER>";
 	EncryptUserID e = new EncryptUserID(USER_ID);
 
 	//henter data fra URL og l??er ind til en string
@@ -57,5 +62,24 @@ public class GetCalendarData {
 //        for (int i = 0; i < events.getEvents().size(); i++){
 //            System.out.println(events.getEvents().get(i).getActivityid());
 //        }
+    }
+    
+    public Events getDataFromCBSCalendar(String userName) {
+    	String[] userIdSplit = userName.split("@");
+    	Events events = null;
+    	if(userIdSplit!=null && userIdSplit.length>0){
+    		EncryptUserID encryptUserId = new EncryptUserID(userIdSplit[0]);
+    		try {
+				String json = readUrl(CALENDAR_URL.replace(USER_ID_PLACEHOLDER, userIdSplit[0]).replace(ENCRYPTED_KEY_PLACEHOLDER, encryptUserId.getKey()));
+				System.out.println("json: " + json);
+				Gson gson = new Gson();
+				events = gson.fromJson(json, Events.class);
+				
+    		} catch (Exception e) {
+				e.printStackTrace();
+			}
+    		
+    	}
+    	return events;
     }
 }

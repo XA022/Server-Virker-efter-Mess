@@ -19,7 +19,7 @@ public class TCPClient {
 		CE.setOverallID("createEvent");
 		CE.setType(1);
 		CE.setLocation("CBS");
-		CE.setCreatedby("Krri13ab");
+		CE.setuserID("Krri13ab");
 		CE.setStarttime("18:00:00");
 		CE.setEndtime("23:59:00");
 		CE.setName("Julefrokost");

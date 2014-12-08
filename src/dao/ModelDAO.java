@@ -40,7 +40,7 @@ public abstract class ModelDAO {
         ResultSet resultSet = getConn().getMetaData().getCatalogs();
         while (resultSet.next()) {
             String databaseName = resultSet.getString(1);
-            System.out.println(databaseName);
+//            System.out.println(databaseName);
             if(databaseName.equals(dbName)){
                 return true;
             }
@@ -155,7 +155,7 @@ public abstract class ModelDAO {
     	if(init) {
     		setConn(DriverManager.getConnection(sqlUrl, sqlUser, sqlPasswd));
     	}else{
-    		System.out.println("in getConnection: " + "["+sqlUrl+","+dbName+"," +sqlUser+ ","+sqlPasswd+"]");
+//    		System.out.println("in getConnection: " + "["+sqlUrl+","+dbName+"," +sqlUser+ ","+sqlPasswd+"]");
     		setConn(DriverManager.getConnection(sqlUrl+"/"+dbName, sqlUser, sqlPasswd));
     	}
     }

@@ -23,13 +23,8 @@ public class Note extends ModelDAO{
 			
 			String[] fields = {"id", "eventId", "createdBy", "text", "dateTime", "active"};
 			String[] values = {nId, eId, createdBy, text, dateTime, String.valueOf(isActive)};
-			try {
-				qb.insertInto("notes", fields).values(values).Execute();
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			qb.insertInto("notes", fields).values(values).Execute();
+	
 		}
 
 		public void DeleteNote (int noteID) throws SQLException {

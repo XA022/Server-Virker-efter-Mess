@@ -1,9 +1,12 @@
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.QOTD.QOTDModel;
 import model.calendar.Event;
+import model.calendar.Events;
 import model.note.Note;
+import model.user.User;
 import JsonClasses.AuthUser;
 import JsonClasses.CalendarInfo;
 import JsonClasses.CreateCalendar;
@@ -18,8 +21,13 @@ import JsonClasses.GetNote;
 
 
 
+
+
+
+
 import com.google.gson.*;
 
+import dao.DaoController;
 import dao.SwitchMethods;
 
 public class GiantSwitch {
@@ -34,7 +42,7 @@ public class GiantSwitch {
 		//ForecastModel forecastKlasse = new ForecastModel();
 		QOTDModel QOTDKlasse = new QOTDModel();
 		QOTDKlasse.saveQuote();
-		SwitchMethods SW = new SwitchMethods();
+		SwitchMethods switchMethods = new SwitchMethods();
 		
 		Gson gson = new GsonBuilder().create();
 		String answer = "";	
@@ -58,7 +66,7 @@ public class GiantSwitch {
 			AuthUser AU = (AuthUser)gson.fromJson(jsonString, AuthUser.class);
 			System.out.println("Recieved logIn");
 			try {
-				answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword());
+				answer = switchMethods.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -74,13 +82,13 @@ public class GiantSwitch {
 		case "createCalendar":
 			CreateCalendar CC = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
 			System.out.println(CC.getCalendarName()+ "Den har lagt det nye ind i klassen");
-			answer = SW.createNewCalendar(CC.getUserID(), CC.getCalendarName(), CC.getPublicOrPrivate());
+			answer = switchMethods.createNewCalendar(CC.getUserID(), CC.getCalendarName(), CC.getPublicOrPrivate());
 			break;
 		
 		case "deleteCalender":
 			DeleteCalendar DC = (DeleteCalendar)gson.fromJson(jsonString, DeleteCalendar.class);
 			System.out.println(DC.getCalendarName()+ "Den har lagt det nye ind i klassen");
-			answer = SW.deleteCalendar(DC.getUserName(), DC.getCalendarName());
+			answer = switchMethods.deleteCalendar(DC.getUserName(), DC.getCalendarName());
 			break;
 		
 		case "saveImportedCalendar": // Unoedig
@@ -88,27 +96,28 @@ public class GiantSwitch {
 			
 		case "getCalendar":
 			System.out.println("Recieved getCalendar");
-			// 1 - OPRET JSON CLASS
-			GetCalendar GC = (GetCalendar)gson.fromJson(jsonString, GetCalendar.class);
-			// 2 - CONVERT FROM JSON STRING TO JAVA OBJECT
-			answer = SW.getCalendar(GC.getName());
-			// 3 - OPRETTE SWITCHMETHODS
+			GetCalendar getCalendar = (GetCalendar)gson.fromJson(jsonString, GetCalendar.class);
+			User user = DaoController.getInstance().getUserDAO().getUser(getCalendar.getUserName());
+			ArrayList<Event> events = switchMethods.GetEvents(String.valueOf(user.getUserId()));
+			Events eventsObject = new Events();
+			eventsObject.setEvents(events);
+			answer = gson.toJson(eventsObject);
 			break;
 
 			/*************
 			 ** Events **
 			 *************/
 
-		case "getEvents":
-			System.out.println("Recieved getEvents");
-			GetEvents GE = (GetEvents)gson.fromJson(jsonString, GetEvents.class);
-			answer = SW.GetEvents(GE.getCreatedby());
-			break;
+//		case "getEvents":
+//			System.out.println("Recieved getEvents");
+//			GetEvents GE = (GetEvents)gson.fromJson(jsonString, GetEvents.class);
+////			answer = switchMethods.GetEvents(GE.getUserID());
+//			break;
 
 		case "createEvent":
 			System.out.println("Recieved saveEvent");
 			CreateEvent CE = (CreateEvent)gson.fromJson(jsonString, CreateEvent.class);
-			answer = SW.CreateEvent(CE.getType(), CE.getLocation(), CE.getCreatedby(), 
+			answer = switchMethods.CreateEvent(CE.getType(), CE.getLocation(), CE.getuserID(), 
 					CE.getStarttime(), CE.getEndtime(), CE.getName(), CE.getText());
 			break;
 
@@ -116,24 +125,24 @@ public class GiantSwitch {
 
 			System.out.println("Recieved deleteEvent");
 			DeleteEvent DE = (DeleteEvent)gson.fromJson(jsonString, DeleteEvent.class);
-			answer = SW.DeleteEvent(DE.getName());
+			answer = switchMethods.deleteEvent(DE.getName());
 			break;
 			
 		case "createNote":
 			System.out.println("Recieved CreateNote");
 			CreateNote CN = (CreateNote)gson.fromJson(jsonString, CreateNote.class);
-			answer = SW.CreateNote(CN.getEventID(), CN.getCreatedBy(), CN.getText(), CN.getDatetime());
+			answer = switchMethods.CreateNote(CN.getEventID(), CN.getUserID(), CN.getText(), CN.getDatetime());
 			
 		case "getNote":
 			System.out.println("Recieved getNote");
 			GetNote GN = (GetNote)gson.fromJson(jsonString, GetNote.class);
-			answer = SW.GetNote(GN.getEventId());
+			answer = switchMethods.GetNote(GN.getEventId());
 			break;
 			
 		case "deleteNote":
 			System.out.println("Recieved deleteNote");
 			DeleteNote DN = (DeleteNote)gson.fromJson(jsonString, DeleteNote.class);
-			answer = SW.DeleteNote(DN.getEventId());
+			answer = switchMethods.DeleteNote(DN.getEventId());
 			break;
 
 		/**********

@@ -5,7 +5,7 @@ public class CreateNote implements java.io.Serializable{
 	private static final long serialVersionUID = -3269894274812108796L;
 	private String overallID = "CreateNote"; 
 	private int eventID;
-	private String createdBy;
+	private String userID;
 	private String text;
 	private String datetime;
 	private int active;
@@ -23,11 +23,11 @@ public class CreateNote implements java.io.Serializable{
 	public void setEventID(int eventID) {
 		this.eventID = eventID;
 	}
-	public String getCreatedBy() {
-		return createdBy;
+	public String getUserID() {
+		return userID;
 	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 	public String getText() {
 		return text;
