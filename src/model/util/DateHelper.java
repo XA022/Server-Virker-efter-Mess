@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DateHelper {
-	private static final String dateformat = "yyyy-MM-dd HH:mm:ss";
+	private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	public static Date getDateFromCBSEvent(ArrayList<String> dateArray) {
 		
@@ -20,7 +20,7 @@ public class DateHelper {
 	
 	public static String getFormattedDateString(Date date){
 		//2014-11-14 22:15:01
-	    SimpleDateFormat sdfDate = new SimpleDateFormat(dateformat);//dd/MM/yyyy
+	    SimpleDateFormat sdfDate = new SimpleDateFormat(DATE_FORMAT);//dd/MM/yyyy
 	    String strDate = sdfDate.format(date);
 	    return strDate;
 
@@ -30,7 +30,7 @@ public class DateHelper {
 			return null;
 		}
 		
-		DateFormat formatter = new SimpleDateFormat(dateformat);
+		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 		
 		try {
 			return formatter.parse(dateString);
@@ -52,6 +52,10 @@ public class DateHelper {
 				" " + hour + ":" + minute + ":" + second;
 		System.out.println("dateString: " + dateString);
 		return dateString;
+	}
+	
+	public static String getFormat() {
+		return DATE_FORMAT;
 	}
 	
 }

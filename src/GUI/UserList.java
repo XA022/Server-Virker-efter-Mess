@@ -107,16 +107,7 @@ public class UserList extends JPanel {
 		  				
 				};
 				ArrayList<User> users = DaoController.getInstance().getUserDAO().getAllUsers();
-				User addedUser = users.get(users.size()-1);
-				data = new Object[1][5];
 
-					data[0][0] = addedUser.getUserId();
-					data[0][1] = addedUser.getEmail();
-					data[0][2] = addedUser.getActive();
-					data[0][3] = addedUser.getDate();
-					data[0][4] = OBFUSCATED_PASSWORD;
-				
-		          
 		          
 				DefaultTableModel model = new DefaultTableModel(getUserData(users), columnNames);
 	            table.setModel(model);

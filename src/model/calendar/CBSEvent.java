@@ -1,12 +1,14 @@
 package model.calendar;
 
+
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by jesperbruun on 10/10/14.
  * Til hver specifik event bliver de defineret saaledes.
  */
-public class Event {
+public class CBSEvent {
     private String activityid;
     private String eventid;
     private String type;
@@ -14,11 +16,11 @@ public class Event {
     private String description;
     private String location;
     private String userId;
-    private Date start;
-    private Date end;
+    private ArrayList<String> start;
+    private ArrayList<String> end;
     private int calendarId;
     
-    public Event() {
+    public CBSEvent() {
     	
     }
     
@@ -67,9 +69,9 @@ public class Event {
     
 
     
-	public Event(String activityid, String eventid, String type, String title,
-			String description, String location, String userId, Date start,
-			Date end) {
+	public CBSEvent(String activityid, String eventid, String type, String title,
+			String description, String location, String userId, ArrayList<String> start,
+			ArrayList<String> end) {
 		super();
 		this.activityid = activityid;
 		this.eventid = eventid;
@@ -104,22 +106,21 @@ public class Event {
 		this.calendarId = calendarId;
 	}
 
-	public Date getStart() {
+	public ArrayList<String> getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(ArrayList<String> start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public ArrayList<String> getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(ArrayList<String> end) {
 		this.end = end;
 	}
 
-	
 	
 }

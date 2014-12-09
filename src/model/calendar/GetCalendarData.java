@@ -64,16 +64,16 @@ public class GetCalendarData {
 //        }
     }
     
-    public Events getDataFromCBSCalendar(String userName) {
+    public CBSEvents getDataFromCBSCalendar(String userName) {
     	String[] userIdSplit = userName.split("@");
-    	Events events = null;
+    	CBSEvents events = null;
     	if(userIdSplit!=null && userIdSplit.length>0){
     		EncryptUserID encryptUserId = new EncryptUserID(userIdSplit[0]);
     		try {
 				String json = readUrl(CALENDAR_URL.replace(USER_ID_PLACEHOLDER, userIdSplit[0]).replace(ENCRYPTED_KEY_PLACEHOLDER, encryptUserId.getKey()));
 				System.out.println("json: " + json);
 				Gson gson = new Gson();
-				events = gson.fromJson(json, Events.class);
+				events = gson.fromJson(json, CBSEvents.class);
 				
     		} catch (Exception e) {
 				e.printStackTrace();

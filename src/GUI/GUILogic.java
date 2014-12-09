@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import service.CalendarService;
 import model.QueryBuild.QueryBuilder;
 import dao.SwitchMethods;
 
@@ -23,7 +22,7 @@ public class GUILogic {
 		screen.getLogin().addActionListener(new LoginActionListener());
 		screen.getMainMenu().addActionListener(new MainMenuActionListener());
 		screen.getUserInfo().addActionListener(new UserInfoActionListener());
-		screen.getNoteList().addActionListener(new NoteListActionListener());
+		screen.getCalendarList().addActionListener(new CalendarListActionListener());
 		screen.getUserList().addActionListener(new UserListActionListener());
 		screen.getEventlist().addActionListener(new EventListActionListener());
 		screen.getAddEventGUI().addActionListener(
@@ -54,7 +53,7 @@ public class GUILogic {
 				if (e.getSource() == screen.getLogin().getBtnLogIn()) {
 
 					if (authReply.equals(LOGGED_IN)) {
-						new CalendarService().fetchCBSCalendar(userName);
+//						new CalendarService().fetchCBSCalendar(userName);
 						
 						screen.show(Screen.MAINMENU);
 					} else {
@@ -78,8 +77,8 @@ public class GUILogic {
 			if (e.getSource() == screen.getMainMenu().getBtnUserlist()) {
 				screen.show(Screen.USERLIST);
 			}
-			if (e.getSource() == screen.getMainMenu().getBtnNotelist()) {
-				screen.show(Screen.NOTELIST);
+			if (e.getSource() == screen.getMainMenu().getBtnCalendarlist()) {
+				screen.show(Screen.CALENDARLIST);
 			}
 			if (e.getSource() == screen.getMainMenu().getBtnEventlist()) {
 				screen.show(Screen.EVENTLIST);
@@ -193,13 +192,13 @@ public class GUILogic {
 		}
 	}
 
-	private class NoteListActionListener implements ActionListener {
+	private class CalendarListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if (e.getSource() == screen.getNoteList().getBtnMainMenu()) {
+			if (e.getSource() == screen.getCalendarList().getBtnMainMenu()) {
 				screen.show(Screen.MAINMENU);
 			}
-			if (e.getSource() == screen.getNoteList().getBtnLogout()) {
+			if (e.getSource() == screen.getCalendarList().getBtnLogout()) {
 				screen.show(Screen.LOGIN);
 			}
 		}

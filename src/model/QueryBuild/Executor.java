@@ -23,7 +23,12 @@ public class Executor extends ModelDAO {
     private QueryBuilder queryBuilder;
     private Where where;
     
-    private Values values;
+    public void setWhere(Where where) {
+		this.where = where;
+	}
+
+
+	private Values values;
     private boolean getAll = false;
 
     protected QueryBuilder getQueryBuilder() {
@@ -52,7 +57,11 @@ public class Executor extends ModelDAO {
         this.where = where;
     }
 
-    public Executor(QueryBuilder queryBuilder, Values values) {
+    public void setQueryBuilder(QueryBuilder queryBuilder) {
+		this.queryBuilder = queryBuilder;
+	}
+
+	public Executor(QueryBuilder queryBuilder, Values values) {
         this.queryBuilder = queryBuilder;
         this.values = values;
     }
@@ -180,14 +189,14 @@ public class Executor extends ModelDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				getConn().close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-        
+//		finally {
+//			try {
+//				getConn().close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//        
         
         return executedSuccesfully;
     }

@@ -1,0 +1,31 @@
+Server API
+
+Serveren modtager en String (kan vaere json) og returnere data efter hvilken String der er givet.
+
+Strings:
+
+requestQuote
+
+saveQuote
+
+getQuote
+
+requestForecast
+
+getForecast
+
+saveForecast
+
+createCalendar
+
+importCalendar
+
+exportCalendar
+
+saveNote
+
+getNote
+
+getEvents
+
+getEventInfo

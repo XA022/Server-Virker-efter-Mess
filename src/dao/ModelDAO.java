@@ -1,10 +1,13 @@
 package dao;
 
 import com.ibatis.common.jdbc.ScriptRunner;
+
 import config.Configurations;
 
 import java.io.*;
 import java.sql.*;
+
+import model.QueryBuild.ConnectionController;
 
 
 /**
@@ -12,7 +15,7 @@ import java.sql.*;
 public abstract class ModelDAO {
 
     private static Configurations cf = new Configurations();
-
+    private ModelDAO instance;
     private static String sqlUrl = "jdbc:mysql://" + cf.getHost() + ":" + cf.getPort();
     private static String sqlUser = cf.getUsername();
     private static String sqlPasswd = cf.getPassword();
@@ -152,12 +155,22 @@ public abstract class ModelDAO {
      * @throws java.sql.SQLException
      */
     public void getConnection(Boolean init) throws SQLException {
-    	if(init) {
-    		setConn(DriverManager.getConnection(sqlUrl, sqlUser, sqlPasswd));
-    	}else{
-//    		System.out.println("in getConnection: " + "["+sqlUrl+","+dbName+"," +sqlUser+ ","+sqlPasswd+"]");
-    		setConn(DriverManager.getConnection(sqlUrl+"/"+dbName, sqlUser, sqlPasswd));
+    	if(ConnectionController.getInstance().getConnection()==null) {
+        	if(init) {
+        		setConn(DriverManager.getConnection(sqlUrl, sqlUser, sqlPasswd));
+        		ConnectionController.getInstance().setConnection(conn);
+        	}else{
+//        		System.out.println("in getConnection: " + "["+sqlUrl+","+dbName+"," +sqlUser+ ","+sqlPasswd+"]");
+        		setConn(DriverManager.getConnection(sqlUrl+"/"+dbName, sqlUser, sqlPasswd));
+        		ConnectionController.getInstance().setConnection(conn);
+        	}
+    	} else {
+    		setConn(ConnectionController.getInstance().getConnection());
     	}
+
+    	
+    	
+
     }
 
     /**
@@ -195,6 +208,12 @@ public abstract class ModelDAO {
     private void setConn(Connection conn) {
         this.conn = conn;
     }
+	public ModelDAO getInstance() {
+		return instance;
+	}
+	public void setInstance(ModelDAO instance) {
+		this.instance = instance;
+	}
 
 
 }

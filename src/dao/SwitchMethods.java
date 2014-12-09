@@ -1,9 +1,12 @@
 package dao;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 import model.QOTD.QOTDModel;
 import model.QueryBuild.QueryBuilder;
+import model.calendar.CBSEvent;
 import model.calendar.Calendar;
 import model.calendar.Event;
 import model.util.DateHelper;
@@ -25,25 +28,19 @@ public class SwitchMethods extends ModelDAO
 	 * @throws SQLException
 	 */
 
-	public String createNewCalendar (long userID, String calendarName, int isPrivate) throws SQLException
+	public boolean createNewCalendar (long userID, String calendarName, int isPrivate) throws SQLException
 	{
-		String stringToBeReturned ="";
 		testConnection();
-		System.out.println("connection til sql oprettet");
 		if(authenticateNewCalendar(calendarName) == false)
 		{
 			System.out.println("der proeves ar oprette en ny kalender");
 			addNewCalendar(calendarName, String.valueOf(userID), isPrivate);
-			System.out.println("kalenderen er oprettet");
-			stringToBeReturned = "The new calendar has been created!";
+			return true;
 		}
 		else
 		{
-			stringToBeReturned = "The new calender has not been created!";
+			return false;
 		}
-		
-		
-		return stringToBeReturned;
 	}
 	
 	public boolean authenticateNewCalendar(String newCalendarName) throws SQLException
@@ -82,6 +79,10 @@ public class SwitchMethods extends ModelDAO
 		stringToBeReturned = removeCalendar(userName, calendarName);
 
 		return stringToBeReturned;
+	}
+	
+	public void deleteCalendar (String calendarId) {
+		qb.deleteFrom("Calendar",false).where("id", "=", calendarId).Execute();
 	}
 	
 	public String removeCalendar (String userName, String calendarName) throws SQLException
@@ -128,6 +129,26 @@ public class SwitchMethods extends ModelDAO
 		return stringToBeReturend;
 	}
 	
+	public ArrayList<Calendar> getAllCalendars() throws SQLException
+	{
+		ArrayList<Calendar> calendars = new ArrayList<Calendar>();
+	 	
+		resultSet = qb.selectFrom("Calendar").all().ExecuteQuery();
+		
+		while(resultSet.next())
+		{
+			Calendar calendar = new Calendar();
+			calendar.setId(resultSet.getInt("id"));
+			calendar.setActive(resultSet.getInt("active"));
+			calendar.setName(resultSet.getString("name"));
+			calendar.setUserId(resultSet.getString("userId"));
+			calendar.setIsPrivate(resultSet.getInt("isPrivate"));
+			calendars.add(calendar);
+			
+		}
+		return calendars;
+	}
+	
 	public ArrayList<Calendar> getCalendars(String userId) throws SQLException
 	{
 		ArrayList<Calendar> calendars = new ArrayList<Calendar>();
@@ -152,6 +173,25 @@ public class SwitchMethods extends ModelDAO
 	{
 		Calendar calendar = null;
 		resultSet = qb.selectFrom("Calendar").where("name", "=", name).ExecuteQuery();
+		
+		while(resultSet.next())
+		{
+			calendar = new Calendar();
+			calendar.setId(resultSet.getInt("id"));
+			calendar.setActive(resultSet.getInt("active"));
+			calendar.setName(resultSet.getString("name"));
+			calendar.setUserId(resultSet.getString("userId"));
+			calendar.setIsPrivate(resultSet.getInt("isPrivate"));
+			return calendar;
+			
+		}
+		return calendar;
+	}
+	
+	public Calendar getCalendar(int id) throws SQLException
+	{
+		Calendar calendar = null;
+		resultSet = qb.selectFrom("Calendar").where("id", "=", String.valueOf(id)).ExecuteQuery();
 		
 		while(resultSet.next())
 		{
@@ -199,7 +239,7 @@ public class SwitchMethods extends ModelDAO
 			
 			event.setEventid(resultSet.getString("id"));
 			event.setType(resultSet.getString("type"));
-			event.setUserId(resultSet.getString("userId"));
+
 //			event.setStart((ArrayList<String>) resultSet.getArray("start"));
 //			event.setEnd((ArrayList<String>) resultSet.getArray("end"));
 
@@ -208,27 +248,75 @@ public class SwitchMethods extends ModelDAO
 		return events;
 	}
 	
-	public String CreateEvent(int type, String location, String userId, String start, String end, String name, String text) throws SQLException
+	@SuppressWarnings("unchecked")
+	public ArrayList<Event> GetEvents() throws SQLException
 	{
-		String stringToBeReturned ="";
-		String [] keys = {"type", "location", "userId", "start", "end", "name", "text", "active","calendarID"};
-		String [] values = {String.valueOf(type), location, userId, start, end, name, text, ACTIVE_BIT,"1"};
+		resultSet = qb.selectFrom("events").all().ExecuteQuery();
+		ArrayList<Event> events = new ArrayList<Event>();
+		while(resultSet.next())
+		{
+			Event event = new Event();
+			event.setTitle(resultSet.getString("title"));
+			event.setDescription(resultSet.getString("description"));
+			event.setLocation(resultSet.getString("location"));
+			event.setUserId(resultSet.getString("userId"));
+			
+			event.setEventid(resultSet.getString("id"));
+			event.setType(resultSet.getString("type"));
+			event.setCalendarId(resultSet.getInt("calendarId"));
+//			event.setStart((ArrayList<String>) resultSet.getArray("start"));
+//			event.setEnd((ArrayList<String>) resultSet.getArray("end"));
+
+			events.add(event);
+		}
+		
+		return events;
+	}
 	
-		qb.insertInto("events", keys).values(values).Execute();
-		
-		stringToBeReturned = "event oprettet";
-		
-		return stringToBeReturned;
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<Event> GetEventsFromCalendarId(String calendarId) throws SQLException
+	{
+		resultSet = qb.selectFrom("events").where("calendarId", "=", calendarId).ExecuteQuery();
+		ArrayList<Event> events = new ArrayList<Event>();
+		while(resultSet.next())
+		{
+			Event event = new Event();
+			event.setTitle(resultSet.getString("title"));
+			event.setDescription(resultSet.getString("description"));
+			event.setLocation(resultSet.getString("location"));
+			event.setUserId(resultSet.getString("userId"));
+			
+			event.setEventid(resultSet.getString("id"));
+			event.setType(resultSet.getString("type"));
+			event.setCalendarId(resultSet.getInt("calendarId"));
+			Timestamp start = resultSet.getTimestamp(("start"));
+			Timestamp end = resultSet.getTimestamp(("end"));
+			System.out.println("start: " + start);
+			System.out.println("end: " + end);
+			event.setStart(new Date(start.getTime()));
+			event.setEnd(new Date(end.getTime()));
+
+			events.add(event);
+		}
+		return events;
+	}
+	
+	public void createEvent(String type, String location, String userId, String start, String end, String title, String description, String calendarId)
+	{
+		String [] keys = {"type", "location", "userId", "start", "end", "title", "description", "active","calendarID"};
+		String [] values = {type, location, userId, start, end, title, description, ACTIVE_BIT, calendarId};
+
+	    qb.insertInto("events", keys).values(values).Execute();
+
 	}
 		
 	public String createEvent(String calendarId, String customEvent, Event event) throws SQLException
 	{
 		String stringToBeReturned ="";
 		String [] keys = {"type", "location", "userId", "start", "end", "title", "description", "active","customevent","calendarId"};
-		String startDate = DateHelper.getFormattedDateStringFromCBSEvent(event.getStart());
-		String endDate = DateHelper.getFormattedDateStringFromCBSEvent(event.getEnd());
-		System.out.println("startDate: " + startDate);
-		System.out.println("endDate: " + endDate);
+		String startDate = DateHelper.getFormattedDateString(event.getStart());
+		String endDate = DateHelper.getFormattedDateString(event.getEnd());
 		String [] values = {
 				event.getType(), 
 				event.getLocation(), 
@@ -248,6 +336,33 @@ public class SwitchMethods extends ModelDAO
 		
 		return stringToBeReturned;
 	}
+
+	public String createEvent(String calendarId, String customEvent, CBSEvent event) throws SQLException
+	{
+		String stringToBeReturned ="";
+		String [] keys = {"type", "location", "userId", "start", "end", "title", "description", "active","customevent","calendarId"};
+		String startDate = DateHelper.getFormattedDateStringFromCBSEvent(event.getStart());
+		String endDate = DateHelper.getFormattedDateStringFromCBSEvent(event.getEnd());
+		String [] values = {
+				event.getType(), 
+				event.getLocation(), 
+				event.getUserId(), 
+				startDate, 
+				endDate, 
+				event.getTitle(), 
+				event.getDescription(), 
+				ACTIVE_BIT,
+				customEvent,
+				calendarId
+				};
+	
+		qb.insertInto("events", keys).values(values).Execute();
+		
+		stringToBeReturned = "event oprettet";
+		
+		return stringToBeReturned;
+	}
+	
 	
 	public String CreateNote (int eventID, String createdby, String text, String dateTime) throws SQLException
 	{

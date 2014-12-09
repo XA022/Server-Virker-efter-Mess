@@ -5,14 +5,14 @@
 	import java.awt.Dimension;
 
 	import javax.swing.JLabel;
-	import javax.swing.ImageIcon;
-	import javax.swing.JTable;
-	import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 	import java.awt.Font;
 
 	import javax.swing.SwingConstants;
-	import javax.swing.JButton;
+import javax.swing.JButton;
 
 	import java.awt.Color;
 
@@ -21,11 +21,21 @@
 	import java.awt.Component;
 
 	import javax.swing.border.CompoundBorder;
-	import javax.swing.border.BevelBorder;
-	import javax.swing.border.MatteBorder;
-	import javax.swing.JTextPane;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextPane;
+
+import model.calendar.Calendar;
+import model.calendar.Event;
+import model.user.User;
+import dao.DaoController;
+import dao.SwitchMethods;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 	public class EventList extends JPanel {
@@ -33,14 +43,16 @@ import java.awt.event.ActionEvent;
 		/**
 		 * Create the panel.
 		 */
-		
+		private JTable table;
 		private JButton btnAdd;
 		private JButton btnDelete;
 		private JButton btnLogout;
 		private JButton btnMainMenu;
-		
-		
+		private SwitchMethods switchMethods;
+		String[] columnNames = { "User", "Calendar", "Event", "Type" ,"Description", "Location", "Start time", "End time" };
+
 		public EventList() {
+			switchMethods = new SwitchMethods();
 			setSize(new Dimension(1366, 768));
 			setLayout(null);
 
@@ -55,19 +67,24 @@ import java.awt.event.ActionEvent;
 			lblUpcomingEvent.setForeground(Color.WHITE);
 			lblUpcomingEvent.setBounds(51, 140, 309, 33);
 			add(lblUpcomingEvent);
-
-			
+//
+//			event.setTitle(resultSet.getString("title"));
+//			event.setDescription(resultSet.getString("description"));
+//			event.setLocation(resultSet.getString("location"));
+//			event.setUserId(resultSet.getString("userId"));
+//			
+//			event.setEventid(resultSet.getString("id"));
+//			event.setType(resultSet.getString("type"));
 			//Laver tabellen inde i Eventlisten.
-			String[] columnNames = { "Calendar", "Event", "Date", "Note", "" };
 //			Calendar
 //			Event - description
 //			location
 //			start time
 //			end time
 //			
-			Object[][] data = { };
-
-			final JTable table = new JTable(data, columnNames);
+	    	table = new JTable();
+	    	table.setModel(new DefaultTableModel());
+	        table = getEventTable();
 			table.setSurrendersFocusOnKeystroke(true);
 			table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 			table.setFillsViewportHeight(true);
@@ -149,6 +166,44 @@ import java.awt.event.ActionEvent;
 			return btnMainMenu;
 		}
 		
+		private JTable getEventTable() {
+			return new JTable(getData(), columnNames);
+		}
+		
+		private Object[][] getData() {
+			Object[][] data = {
+					
+			};
+			ArrayList<Event>  events = new ArrayList<Event>();
+			try {
+				events = switchMethods.GetEvents();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			data = new Object[events.size()][8];
+
+			for(int i=0;i<events.size();i++) {
+				Event event = events.get(i);
+				Calendar calendar = null;
+				try {
+					calendar = switchMethods.getCalendar(event.getCalendarId());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				User user = DaoController.getInstance().getUserDAO().getUserFromId(event.getUserId());
+//				String[] columnNames = { "User", "Calendar", "Event", "Type" ,"Description", "Location", "Start time", "End time" };
+
+				data[i][0] = user.getEmail();
+				data[i][1] = calendar.getName();
+				data[i][2] = event.getTitle();
+				data[i][3] = event.getType();
+				data[i][4] = event.getDescription();
+				data[i][5] = event.getLocation();
+				data[i][6] = event.getStart();
+				data[i][7] = event.getEnd();
+			}
+			return data;
+		}
 		
 	}
 

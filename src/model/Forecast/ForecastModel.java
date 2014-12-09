@@ -38,7 +38,6 @@ public class ForecastModel {
 	             url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?lat=55.681589&lon=12.529092&cnt=14&mode=json&units=metric");
 	             conn = (HttpURLConnection) url.openConnection();
 	             conn.setRequestMethod("GET");
-	             
 	             //henter indholder fra hjemmesiden efter vi har aabnet en forbindelse
 	             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	             while ((line = rd.readLine()) != null) {

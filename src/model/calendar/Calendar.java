@@ -36,6 +36,11 @@ public class Calendar {
 	public void setIsPrivate(int isPrivate) {
 		this.isPrivate = isPrivate;
 	}
+	@Override
+	public String toString() {
+		return "Calendar [id=" + id + ", name=" + name + ", active=" + active
+				+ ", userId=" + userId + ", isPrivate=" + isPrivate + "]";
+	}
 	
 	
 }

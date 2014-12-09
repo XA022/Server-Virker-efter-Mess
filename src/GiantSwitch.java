@@ -1,14 +1,18 @@
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
+import service.CalendarService;
+import model.Forecast.ForecastModel;
+import model.Forecast.Forecasts;
 import model.QOTD.QOTDModel;
+import model.calendar.Calendar;
+import model.calendar.Calendars;
 import model.calendar.Event;
 import model.calendar.Events;
 import model.note.Note;
 import model.user.User;
+import model.util.DateHelper;
 import JsonClasses.AuthUser;
-import JsonClasses.CalendarInfo;
 import JsonClasses.CreateCalendar;
 import JsonClasses.CreateEvent;
 import JsonClasses.CreateNote;
@@ -16,16 +20,12 @@ import JsonClasses.DeleteCalendar;
 import JsonClasses.DeleteEvent;
 import JsonClasses.DeleteNote;
 import JsonClasses.GetCalendar;
+import JsonClasses.GetCalendars;
 import JsonClasses.GetEvents;
 import JsonClasses.GetNote;
 
-
-
-
-
-
-
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import dao.DaoController;
 import dao.SwitchMethods;
@@ -33,20 +33,20 @@ import dao.SwitchMethods;
 public class GiantSwitch {
 	
 	
-	
+	User user;
 	public String GiantSwitchMethod(String jsonString) throws SQLException {
 
 		//Events eventsKlasse = new Events(0, 0, 0, jsonString, jsonString, jsonString, jsonString, jsonString);
 
-		Note noteKlasse = new Note();
+
 		//ForecastModel forecastKlasse = new ForecastModel();
-		QOTDModel QOTDKlasse = new QOTDModel();
-		QOTDKlasse.saveQuote();
+		QOTDModel qotd = new QOTDModel();
+		qotd.saveQuote();
 		SwitchMethods switchMethods = new SwitchMethods();
-		
+		ForecastModel forecast = new ForecastModel();
 		Gson gson = new GsonBuilder().create();
 		String answer = "";	
-
+		System.out.println("jsonString: " + jsonString);
 		//Creates a switch which determines which method should be used. Methods will be applied later on
 		switch (Determine(jsonString)) {
 		//If the Json String contains one of the keywords below, run the relevant method.
@@ -81,8 +81,8 @@ public class GiantSwitch {
 		 *************/
 		case "createCalendar":
 			CreateCalendar CC = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
-			System.out.println(CC.getCalendarName()+ "Den har lagt det nye ind i klassen");
-			answer = switchMethods.createNewCalendar(CC.getUserID(), CC.getCalendarName(), CC.getPublicOrPrivate());
+		    user = DaoController.getInstance().getUserDAO().getUser(CC.getUserName());
+			answer = String.valueOf(switchMethods.createNewCalendar(user.getUserId(), CC.getCalendarName(), CC.getPublicOrPrivate()));
 			break;
 		
 		case "deleteCalender":
@@ -95,30 +95,52 @@ public class GiantSwitch {
 			break;
 			
 		case "getCalendar":
-			System.out.println("Recieved getCalendar");
 			GetCalendar getCalendar = (GetCalendar)gson.fromJson(jsonString, GetCalendar.class);
-			User user = DaoController.getInstance().getUserDAO().getUser(getCalendar.getUserName());
+			user = DaoController.getInstance().getUserDAO().getUser(getCalendar.getUserName());
 			ArrayList<Event> events = switchMethods.GetEvents(String.valueOf(user.getUserId()));
 			Events eventsObject = new Events();
 			eventsObject.setEvents(events);
 			answer = gson.toJson(eventsObject);
+			break;
+		case "getCalendars":
+			GetCalendars getCalendars = (GetCalendars)gson.fromJson(jsonString, GetCalendars.class);
+			user = DaoController.getInstance().getUserDAO().getUser(getCalendars.getUserName());
+			//Add or update CBS calendar for the user to get
+			new CalendarService().fetchCBSCalendar(getCalendars.getUserName());
+			ArrayList<Calendar> calendarList = switchMethods.getCalendars(String.valueOf(user.getUserId()));
+			Calendars calendars = new Calendars();
+			calendars.setCalendars(calendarList);
+			answer = gson.toJson(calendars);
 			break;
 
 			/*************
 			 ** Events **
 			 *************/
 
-//		case "getEvents":
-//			System.out.println("Recieved getEvents");
-//			GetEvents GE = (GetEvents)gson.fromJson(jsonString, GetEvents.class);
-////			answer = switchMethods.GetEvents(GE.getUserID());
-//			break;
+		case "getEvents":
+			System.out.println("getting events");
+			GetEvents GE = (GetEvents)gson.fromJson(jsonString, GetEvents.class);
+			System.out.println("getting events for calendar " + GE.getCalendarId());
+			events = switchMethods.GetEventsFromCalendarId(String.valueOf(GE.getCalendarId()));
+			eventsObject = new Events();
+			eventsObject.setEvents(events);
+			answer = gson.toJson(eventsObject);
+			break;
 
 		case "createEvent":
-			System.out.println("Recieved saveEvent");
 			CreateEvent CE = (CreateEvent)gson.fromJson(jsonString, CreateEvent.class);
-			answer = switchMethods.CreateEvent(CE.getType(), CE.getLocation(), CE.getuserID(), 
-					CE.getStarttime(), CE.getEndtime(), CE.getName(), CE.getText());
+			user = DaoController.getInstance().getUserDAO().getUser( CE.getUserName());
+			switchMethods.createEvent(
+					CE.getType(), 
+					CE.getLocation(), 
+					String.valueOf(user.getUserId()), 
+					DateHelper.getFormattedDateString(CE.getStarttime()), 
+					DateHelper.getFormattedDateString(CE.getEndtime()), 
+					CE.getTitle(), 
+					CE.getDescription(),
+					String.valueOf(CE.getCalendarId())
+					);
+			answer = "Event " +CE.getTitle()+ " created";
 			break;
 
 		case "deleteEvent":
@@ -150,7 +172,7 @@ public class GiantSwitch {
 		 **********/
 		case "getQuote":
 			System.out.println("in getQuote");
-		answer = QOTDKlasse.getQuote();
+		answer = qotd.getQuote();
 			System.out.println(answer);
 			
 			break;
@@ -159,12 +181,14 @@ public class GiantSwitch {
 		 ** WEATHER **
 		 ************/
 
-		case "getClientForecast":
-			System.out.println("Recieved getClientForecast");
+		case "getWeatherForecast":
+			Forecasts forecasts = new Forecasts();
+			forecasts.setForecasts(forecast.getForecast());
+			answer = gson.toJson(forecasts);
 			break;
 		
 		default:
-			System.out.println("Error");
+			System.out.println("Message not understood.");
 			break;
 		}
 		return answer;
@@ -185,8 +209,8 @@ public class GiantSwitch {
 			return "deleteCalendar";
 		}else if   (ID.contains("createNote")) {
 			return "createNote";
-		} else if (ID.contains("getClientForecast")) {
-			return "getClientForecast";
+		} else if (ID.contains("getWeatherForecast")) {
+			return "getWeatherForecast";
 		} else if (ID.contains("saveImportedCalendar")) {
 			return "saveImportedCalendar";
 		}else if (ID.contains("importCourse")) {
@@ -199,6 +223,8 @@ public class GiantSwitch {
 			return "logIn";
 		} else if (ID.contains("logOut")) {
 			return "logOut";
+		} else if (ID.contains("getCalendars")) {
+			return "getCalendars";
 		} else if (ID.contains("getCalendar")) {
 			return "getCalendar";
 		} else if (ID.contains("createEvent")) {

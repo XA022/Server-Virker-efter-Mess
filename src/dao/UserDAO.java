@@ -75,6 +75,32 @@ public class UserDAO extends ModelDAO {
 		}
 		return users;
 	}
+
+	public User getUserFromId(String userId) {
+        ResultSet rs;
+        User user = null;
+        try {
+
+			QueryBuilder qb = new QueryBuilder();
+			rs = qb.selectFrom("users").where("id", "=", userId).ExecuteQuery();
+
+			rs.beforeFirst();
+
+	        while (rs.next()) {
+	        	user = new User();
+	        	user.setUserId(Integer.valueOf(rs.getString("id")));
+	        	user.setEmail(rs.getString("email"));
+	        	user.setActive(Integer.valueOf(rs.getString("active")));
+	        	user.setDate(DateHelper.getFormattedDateObject(rs.getString("createdDate")));
+	        	user.setPassword(rs.getString("password"));
+	        	return user;
+
+	        }
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return user;
+	}		
 	
 	public User getUser(String userName) {
         ResultSet rs;
